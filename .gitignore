@@ -39,9 +39,6 @@ web/playwright-profile/
 # Generated images
 web/generated-images/
 
-# Claude Code
-.claude/
-
 # Temp files
 *.tmp
 *.temp

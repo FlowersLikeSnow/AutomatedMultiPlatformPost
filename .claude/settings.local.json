@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:ant.design)",
+      "Bash(curl -s \"https://ant.design/llms-full.txt\" -o \"F:/workspace/ruisi-product-image-gen/.claude/ant-design-docs.txt\")"
+    ]
+  }
+}
