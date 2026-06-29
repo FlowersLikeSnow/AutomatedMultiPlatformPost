@@ -25,8 +25,8 @@ export function ConsumptionPage(): React.ReactElement {
       if (dateRange?.[1]) params.endDate = dateRange[1].toISOString()
       if (typeFilter) params.type = typeFilter
 
-      const res = await consumptionApi.getList(params) as { success: boolean; data?: { items: ConsumptionRecord[] } }
-      if (res.success && res.data) setRecords(res.data.items)
+      const res = await consumptionApi.getList(params) as { code: number; data?: { items: ConsumptionRecord[] } }
+      if (res.code === 200 && res.data) setRecords(res.data.items)
     } catch { /* ignore */ } finally { setLoading(false) }
   }
 

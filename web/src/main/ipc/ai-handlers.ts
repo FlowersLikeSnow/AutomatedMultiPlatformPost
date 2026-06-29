@@ -21,15 +21,15 @@ export function registerAiIpcHandlers(): void {
         })
 
         if (!result) {
-          return { success: false, error: 'AI 服务不可用，请检查 .ENV 配置' }
+          return { code: 500, msg: 'AI 服务不可用，请检查 .ENV 配置' }
         }
 
-        return { success: true, data: result }
+        return { code: 200, data: result }
       } catch (error) {
         logger.error('[AI IPC] Generate image failed:', error)
         return {
-          success: false,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          code: 500,
+          msg: error instanceof Error ? error.message : 'Unknown error'
         }
       }
     }
@@ -44,12 +44,12 @@ export function registerAiIpcHandlers(): void {
 
         const expanded = await expandPrompt(params.basePrompt, params.style)
 
-        return { success: true, data: { expandedPrompt: expanded } }
+        return { code: 200, data: { expandedPrompt: expanded } }
       } catch (error) {
         logger.error('[AI IPC] Expand prompt failed:', error)
         return {
-          success: false,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          code: 500,
+          msg: error instanceof Error ? error.message : 'Unknown error'
         }
       }
     }

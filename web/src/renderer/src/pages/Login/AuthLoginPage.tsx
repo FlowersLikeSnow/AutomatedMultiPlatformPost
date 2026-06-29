@@ -27,15 +27,15 @@ export function AuthLoginPage(): React.ReactElement {
           password: values.password,
           captcha: values.captcha,
           captchaId: 'local'
-        }) as { success: boolean; data?: { user: any; token: string }; error?: string }
+        }) as { code: number; data?: { user: any; token: string }; msg?: string }
 
-        if (res.success && res.data) {
+        if (res.code === 200 && res.data) {
           setUser(res.data.user, res.data.token)
           initPoints()
           message.success('登录成功')
           navigate('/')
         } else {
-          message.error(res.error || '登录失败')
+          message.error(res.msg || '登录失败')
         }
       } catch {
         message.error('网络错误，请稍后重试')

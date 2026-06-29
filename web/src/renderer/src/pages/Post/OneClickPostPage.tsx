@@ -39,9 +39,9 @@ export function OneClickPostPage(): React.ReactElement {
         prompt: selectedTemplate.text_prompt,
         style: selectedTemplate.image_style,
         hashtags: JSON.parse(selectedTemplate.hashtags || '[]')
-      }) as { success: boolean; data?: { text: string } }
+      }) as { code: number; data?: { text: string }; msg?: string }
 
-      if (textRes.success && textRes.data) {
+      if (textRes.code === 200 && textRes.data) {
         setGeneratedText(textRes.data.text)
       }
 
@@ -50,7 +50,7 @@ export function OneClickPostPage(): React.ReactElement {
         prompt: selectedTemplate.text_prompt
       })
 
-      if (imageRes?.success && imageRes.data) {
+      if (imageRes?.code === 200 && imageRes.data) {
         setGeneratedImages(imageRes.data.images.map((img) => img.localPath))
       }
 
@@ -75,10 +75,10 @@ export function OneClickPostPage(): React.ReactElement {
           hashtags: selectedTemplate ? JSON.parse(selectedTemplate.hashtags || '[]') : []
         })
 
-        if (res.success) {
+        if (res.code === 200) {
           message.success(`${platformLabels[platform]} 发布成功`)
         } else {
-          message.error(`${platformLabels[platform]} 发布失败: ${res.error}`)
+          message.error(`${platformLabels[platform]} 发布失败: ${res.msg}`)
         }
       }
       setCurrent(4)
@@ -102,7 +102,7 @@ export function OneClickPostPage(): React.ReactElement {
       <h2 className="text-xl font-bold">一键发帖</h2>
       <Steps current={current} items={steps} />
 
-      <Card className="min-h-[400px]">
+      <Card className="min-h-100">
         <Spin spinning={generating || publishing}>
           {current === 0 && (
             <div className="space-y-4">

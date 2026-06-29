@@ -16,8 +16,8 @@ export function RedeemManagePage(): React.ReactElement {
   const loadCodes = async (): Promise<void> => {
     setLoading(true)
     try {
-      const res = await redeemApi.getList() as { success: boolean; data?: { items: RedeemCode[] } }
-      if (res.success && res.data) setCodes(res.data.items)
+      const res = await redeemApi.getList() as { code: number; data?: { items: RedeemCode[] } }
+      if (res.code === 200 && res.data) setCodes(res.data.items)
     } catch { /* ignore */ } finally { setLoading(false) }
   }
 

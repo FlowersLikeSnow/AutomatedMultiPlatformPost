@@ -7,23 +7,25 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp()
     const response = ctx.getResponse<Response>()
 
-    let status = HttpStatus.INTERNAL_SERVER_ERROR
-    let message = '服务器内部错误'
+    let code = HttpStatus.INTERNAL_SERVER_ERROR
+    let msg = '服务器内部错误'
 
     if (exception instanceof HttpException) {
-      status = exception.getStatus()
+      code = exception.getStatus()
       const exceptionResponse = exception.getResponse()
-      message = typeof exceptionResponse === 'string'
-        ? exceptionResponse
-        : (exceptionResponse as Record<string, unknown>).message as string || exception.message
+      if (typeof exceptionResponse === 'string') {
+        msg = exceptionResponse
+      } else {
+        const res = exceptionResponse as Record<string, unknown>
+        msg = (res.message as string) || exception.message
+      }
     } else if (exception instanceof Error) {
-      message = exception.message
+      msg = exception.message
     }
 
-    response.status(status).json({
-      success: false,
-      error: message,
-      statusCode: status
+    response.status(code).json({
+      code,
+      msg
     })
   }
 }

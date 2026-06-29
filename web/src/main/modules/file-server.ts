@@ -84,14 +84,14 @@ export function initFileServer(): void {
         logger.info(`[FileServer] Saved image: ${filename} (${buf.length} -> ${finalBuffer.length} bytes)`)
 
         return {
-          success: true,
+          code: 200,
           data: { filename, path: filePath }
         }
       } catch (error) {
         logger.error('[FileServer] Save image failed:', error)
         return {
-          success: false,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          code: 500,
+          msg: error instanceof Error ? error.message : 'Unknown error'
         }
       }
     }

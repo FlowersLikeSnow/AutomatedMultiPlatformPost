@@ -18,8 +18,8 @@ export function TemplateListPage(): React.ReactElement {
   const loadTemplates = async (): Promise<void> => {
     setLoading(true)
     try {
-      const res = await templateApi.getList() as { success: boolean; data?: { items: PostTemplate[] } }
-      if (res.success && res.data) {
+      const res = await templateApi.getList() as { code: number; data?: { items: PostTemplate[] } }
+      if (res.code === 200 && res.data) {
         setTemplates(res.data.items)
       }
     } catch {

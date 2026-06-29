@@ -23,8 +23,8 @@ export function TemplateEditPage(): React.ReactElement {
 
   const loadTemplate = async (): Promise<void> => {
     try {
-      const res = await templateApi.getById(id!) as { success: boolean; data?: PostTemplate }
-      if (res.success && res.data) {
+      const res = await templateApi.getById(id!) as { code: number; data?: PostTemplate }
+      if (res.code === 200 && res.data) {
         form.setFieldsValue({
           ...res.data,
           hashtags: JSON.parse(res.data.hashtags || '[]')

@@ -18,8 +18,8 @@ export function UserManagePage(): React.ReactElement {
   const loadUsers = async (): Promise<void> => {
     setLoading(true)
     try {
-      const res = await userApi.getList({ keyword: search }) as { success: boolean; data?: { items: UserInfo[] } }
-      if (res.success && res.data) setUsers(res.data.items)
+      const res = await userApi.getList({ keyword: search }) as { code: number; data?: { items: UserInfo[] } }
+      if (res.code === 200 && res.data) setUsers(res.data.items)
     } catch { /* ignore */ } finally { setLoading(false) }
   }
 

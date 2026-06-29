@@ -126,8 +126,7 @@ export interface PaginatedResponse<T> {
 
 // API 响应
 export interface ApiResult<T> {
-  success: boolean
+  code: number
   data?: T
-  error?: string
-  message?: string
+  msg?: string
 }

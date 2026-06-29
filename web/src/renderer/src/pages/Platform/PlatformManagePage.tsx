@@ -35,7 +35,7 @@ export function PlatformManagePage(): React.ReactElement {
         return
       }
       const res = await api.login()
-      if (res.success && res.data) {
+      if (res.code === 200 && res.data) {
         const userInfo = res.data as unknown as PlatformUserInfo
         setPlatformAccount(code, {
           id: code,
@@ -48,7 +48,7 @@ export function PlatformManagePage(): React.ReactElement {
         })
         message.success(`${platforms.find((p) => p.code === code)?.name} 登录成功`)
       } else {
-        message.error(res.error || '登录失败')
+        message.error(res.msg || '登录失败')
       }
     } catch {
       message.error('登录出错')

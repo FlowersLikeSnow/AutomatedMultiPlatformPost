@@ -106,10 +106,9 @@ export interface PostResult {
 
 // 通用 API 响应
 export interface ApiResponse<T = unknown> {
-  success: boolean
+  code: number
   data?: T
-  error?: string
-  message?: string
+  msg?: string
 }
 
 // AI 生成图片参数

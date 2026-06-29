@@ -15,8 +15,8 @@ export function HomePage(): React.ReactElement {
   const loadStats = async (): Promise<void> => {
     setLoading(true)
     try {
-      const res = await postApi.getStatistics() as { success: boolean; data?: DashboardStats }
-      if (res.success && res.data) {
+      const res = await postApi.getStatistics() as { code: number; data?: DashboardStats }
+      if (res.code === 200 && res.data) {
         setStats(res.data)
       }
     } catch {

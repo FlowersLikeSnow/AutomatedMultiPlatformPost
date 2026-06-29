@@ -3,9 +3,9 @@ import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
 export interface ApiResponse<T> {
-  success: boolean
+  code: number
   data?: T
-  message?: string
+  msg?: string
 }
 
 @Injectable()
@@ -13,7 +13,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, ApiResponse<T>
   intercept(context: ExecutionContext, next: CallHandler): Observable<ApiResponse<T>> {
     return next.handle().pipe(
       map((data) => ({
-        success: true,
+        code: 200,
         data
       }))
     )
