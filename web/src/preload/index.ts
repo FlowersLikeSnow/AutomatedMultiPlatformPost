@@ -38,8 +38,8 @@ const electronAPI = {
   log_error: (msg: string) => ipcRenderer.invoke(IPC_CHANNELS.LOG_ERROR, msg),
   get_log_path: (): Promise<string> => ipcRenderer.invoke(IPC_CHANNELS.GET_LOG_PATH),
 
-  // 小红书
-  xhs: {
+  // 平台（统一使用 PlatformCode 作为键名）
+  xiaohongshu: {
     login: (): Promise<ApiResponse<PlatformUserInfo>> => ipcRenderer.invoke(IPC_CHANNELS.XHS_LOGIN),
     logout: (): Promise<ApiResponse<void>> => ipcRenderer.invoke(IPC_CHANNELS.XHS_LOGOUT),
     getUserInfo: (): Promise<ApiResponse<PlatformUserInfo>> => ipcRenderer.invoke(IPC_CHANNELS.XHS_GET_USER_INFO),

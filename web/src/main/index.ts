@@ -6,6 +6,8 @@ import { initTray } from './modules/tray'
 import { initConfigStore } from './modules/store'
 import { initFileServer } from './modules/file-server'
 import { registerAiIpcHandlers } from './ipc/ai-handlers'
+import { registerPlatformIpcHandlers } from './ipc/platform-handlers'
+import { playwrightManager } from '../playwright/playwright-manager'
 import { logger } from './utils/logger'
 import { loadEnv } from './utils/env'
 
@@ -128,6 +130,9 @@ if (!gotTheLock) {
     // 注册 AI IPC 处理器
     registerAiIpcHandlers()
 
+    // 注册平台 IPC 处理器（Playwright）
+    registerPlatformIpcHandlers()
+
     // 初始化系统托盘
     initTray()
 
@@ -146,8 +151,9 @@ if (!gotTheLock) {
     }
   })
 
-  app.on('before-quit', () => {
+  app.on('before-quit', async () => {
     logger.info('Application quitting')
+    await playwrightManager.exitAll()
   })
 }
 

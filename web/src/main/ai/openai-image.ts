@@ -1,5 +1,5 @@
 import OpenAI from 'openai'
-import { nanoid } from 'nanoid'
+import { v4 as uuidv4 } from 'uuid'
 import { resolve } from 'path'
 import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
@@ -29,7 +29,7 @@ async function ensureImagesDir(): Promise<void> {
 
 async function compressAndSave(imageBuffer: Buffer): Promise<string> {
   await ensureImagesDir()
-  const fileName = `${nanoid(12)}.webp`
+  const fileName = `${uuidv4()}.webp`
   const filePath = resolve(getImagesDir(), fileName)
 
   let compressed: Buffer
@@ -81,7 +81,7 @@ export class OpenAIImageAdapter implements ImageGenAdapter {
     const images: GenResult['images'] = []
 
     for (const item of response.data || []) {
-      const id = nanoid()
+      const id = uuidv4()
       let localPath = ''
 
       if (item.url) {

@@ -41,7 +41,7 @@ export function UserManagePage(): React.ReactElement {
         await userApi.update(editUser.id, values)
         message.success('更新成功')
       } else {
-        await userApi.create(values as UserInfo & { password: string })
+        await userApi.create(values as unknown as UserInfo & { password: string })
         message.success('创建成功')
       }
       setModalOpen(false)

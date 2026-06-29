@@ -4,7 +4,7 @@ import { resolve, extname } from 'path'
 import { readFile, readdir, stat } from 'fs/promises'
 import { existsSync } from 'fs'
 import { app } from 'electron'
-import { nanoid } from 'nanoid'
+import { v4 as uuidv4 } from 'uuid'
 import sharp from 'sharp'
 import { IPC_CHANNELS } from '../../shared/types'
 import type { ApiResponse } from '../../shared/types'
@@ -63,7 +63,7 @@ export function initFileServer(): void {
         }
 
         const fileExt = ext || '.webp'
-        const filename = `${nanoid(12)}${fileExt}`
+        const filename = `${uuidv4()}${fileExt}`
         const filePath = resolve(dir, filename)
         const buf = Buffer.from(buffer)
 

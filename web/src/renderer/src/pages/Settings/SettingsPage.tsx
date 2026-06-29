@@ -85,7 +85,7 @@ export function SettingsPage(): React.ReactElement {
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Electron</span>
-            <span>{(window as Record<string, unknown>)?.process?.versions?.electron || '-'}</span>
+            <span>{(window as any)?.process?.versions?.electron || '-'}</span>
           </div>
         </div>
       </Card>

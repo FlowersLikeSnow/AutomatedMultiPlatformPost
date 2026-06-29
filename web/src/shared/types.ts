@@ -123,8 +123,9 @@ export interface GenerateImageParams {
 export interface GenerateImageResult {
   images: Array<{
     url: string
-    localPath: string
+    localPath?: string
     id: string
+    b64_json?: string
   }>
   metadata?: {
     model?: string
@@ -170,8 +171,8 @@ export interface ElectronAPI {
   log_error: (msg: string) => Promise<void>
   get_log_path: () => Promise<string>
 
-  // 小红书
-  xhs: {
+  // 平台（统一使用 PlatformCode 作为键名）
+  xiaohongshu: {
     login: () => Promise<ApiResponse<PlatformUserInfo>>
     logout: () => Promise<ApiResponse<void>>
     getUserInfo: () => Promise<ApiResponse<PlatformUserInfo>>
@@ -180,7 +181,6 @@ export interface ElectronAPI {
     showBrowser: (visible: boolean) => Promise<ApiResponse<void>>
   }
 
-  // 抖音
   douyin: {
     login: () => Promise<ApiResponse<PlatformUserInfo>>
     logout: () => Promise<ApiResponse<void>>
@@ -190,7 +190,6 @@ export interface ElectronAPI {
     showBrowser: (visible: boolean) => Promise<ApiResponse<void>>
   }
 
-  // 快手
   kuaishou: {
     login: () => Promise<ApiResponse<PlatformUserInfo>>
     logout: () => Promise<ApiResponse<void>>

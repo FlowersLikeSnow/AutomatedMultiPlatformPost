@@ -51,7 +51,7 @@ export function OneClickPostPage(): React.ReactElement {
       })
 
       if (imageRes?.code === 200 && imageRes.data) {
-        setGeneratedImages(imageRes.data.images.map((img) => img.localPath))
+        setGeneratedImages(imageRes.data.images.map((img) => img.localPath).filter(Boolean) as string[])
       }
 
       setCurrent(2)
