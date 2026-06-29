@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build output
+web/out/
+web/dist/
+web/release/
+servers/dist/
+servers/release/
+
+# Environment config (NEVER commit secrets)
+web/.ENV
+servers/.ENV
+
+# Database
+servers/data/*.db
+servers/data/*.db-journal
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# AI Agent skills (each developer installs locally)
+.agents/*
+
+# Playwright browser profiles
+web/playwright-profile/
+
+# Generated images
+web/generated-images/
+
+# Claude Code
+.claude/
+
+# Temp files
+*.tmp
+*.temp
