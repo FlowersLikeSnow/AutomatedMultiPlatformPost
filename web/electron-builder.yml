@@ -1,0 +1,37 @@
+appId: com.multiauto.post
+productName: 多平台自动发帖
+directories:
+  buildResources: resources
+  output: release/${version}
+
+npmRebuild: false
+
+files:
+  - "!**/*.map"
+  - "!**/*.ts"
+  - "!playwright-profile/**/*"
+  - "!.ENV"
+  - "!**/node_modules/**/*"
+
+extraResources:
+  - from: "resources"
+    to: "resources"
+    filter: ["*.png", "*.ico"]
+
+win:
+  icon: resources/icon.png
+  artifactName: "MultiAutoPost-${version}.${ext}"
+  target:
+    - target: nsis
+      arch:
+        - x64
+
+nsis:
+  oneClick: false
+  perMachine: true
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 多平台自动发帖
+  runAfterFinish: true

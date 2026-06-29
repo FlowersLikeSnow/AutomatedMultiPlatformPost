@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>加载中...</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: transparent;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        overflow: hidden;
+      }
+      .loading-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 40px;
+        background: rgba(20, 20, 20, 0.9);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+      }
+      .loading-spinner {
+        width: 48px;
+        height: 48px;
+        border: 3px solid rgba(255, 255, 255, 0.1);
+        border-top-color: #14b8a6;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      .loading-text {
+        color: #e5e5e5;
+        font-size: 14px;
+        letter-spacing: 2px;
+      }
+      .loading-title {
+        color: #14b8a6;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="loading-container">
+      <div class="loading-title">多平台自动发帖</div>
+      <div class="loading-spinner"></div>
+      <div class="loading-text">正在启动...</div>
+    </div>
+  </body>
+</html>

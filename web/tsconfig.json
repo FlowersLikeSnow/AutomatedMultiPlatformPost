@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": ["node", "vite/client"],
+    "paths": {
+      "@main/*": ["./src/main/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@playwright/*": ["./src/playwright/*"],
+      "@renderer/*": ["./src/renderer/src/*"]
+    },
+    "baseUrl": "."
+  },
+  "include": [
+    "src/main/**/*",
+    "src/preload/**/*",
+    "src/shared/**/*",
+    "src/playwright/**/*",
+    "src/renderer/src/**/*",
+    "electron.vite.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "out",
+    "dist"
+  ]
+}
