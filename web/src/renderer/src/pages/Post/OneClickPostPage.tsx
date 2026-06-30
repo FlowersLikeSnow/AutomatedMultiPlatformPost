@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Steps, Card, Button, Select, Checkbox, App, Spin, Input, Tag } from 'antd'
 import { Sparkles, Send } from 'lucide-react'
 import { useSnapshot } from 'valtio'
-import { templateStore } from '../../stores/templateStore'
+import { templateStore, setTemplates } from '../../stores/templateStore'
 import { platformStore, isPlatformLoggedIn } from '../../stores/platformStore'
 import type { PlatformCode } from '@shared/types'
 import type { PostTemplate } from '../../types'
 import { aiApi } from '../../api/ai'
+import { templateApi } from '../../api/templates'
 
 const platformLabels: Record<PlatformCode, string> = {
   xiaohongshu: '小红书',
@@ -26,6 +27,21 @@ export function OneClickPostPage(): React.ReactElement {
   const { templates } = useSnapshot(templateStore)
   const { accounts } = useSnapshot(platformStore)
   const { message } = App.useApp()
+
+  useEffect(() => {
+    loadTemplates()
+  }, [])
+
+  const loadTemplates = async (): Promise<void> => {
+    try {
+      const res = await templateApi.getList()
+      if (res.code === 200 && res.data) {
+        setTemplates(res.data.items)
+      }
+    } catch {
+      message.error('加载模板失败')
+    }
+  }
 
   const availablePlatforms = (Object.keys(accounts) as PlatformCode[]).filter((code) =>
     isPlatformLoggedIn(code)
