@@ -72,12 +72,12 @@ export function Sidebar(): React.ReactElement {
 
   return (
     <div
-      className={`flex flex-col h-full bg-(--sidebar-bg) border-r border-(--border-color) transition-all duration-200 ${
+      className={`flex flex-col h-full bg-(--sidebar-bg) transition-all duration-200 ${
         sidebarCollapsed ? 'w-14' : 'w-32'
       }`}
     >
       {/* 用户信息区域 */}
-      <div className="relative flex flex-col items-center py-2 border-b border-(--border-color)">
+      <div className="relative flex flex-col items-center py-2 border-b border-r border-(--border-color)">
         <div className="w-11 h-11 rounded-full bg-(--primary-color) flex items-center justify-center text-white font-bold text-sm shadow-md shadow-(--primary-color)/20">
           {currentUser?.username?.[0]?.toUpperCase() || 'U'}
         </div>
@@ -118,7 +118,7 @@ export function Sidebar(): React.ReactElement {
       />
 
       {/* 退出登录 */}
-      <div className="border-t border-(--border-color) p-2">
+      <div className="border-t border-r border-(--border-color) p-2">
         <Popconfirm
           title="确定退出登录？"
           description="退出后需重新登录"
