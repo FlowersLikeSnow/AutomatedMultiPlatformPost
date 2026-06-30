@@ -93,7 +93,7 @@ export function UserManagePage(): React.ReactElement {
           <Form.Item name="phone" label="手机号" rules={[{ required: true }]}><Input /></Form.Item>
           {!editUser && <Form.Item name="password" label="密码" rules={[{ required: true }]}><Input.Password /></Form.Item>}
           <Form.Item name="role" label="角色" rules={[{ required: true }]}>
-            <Select options={[{ label: '超级管理员', value: 'super_admin' }, { label: '管理员', value: 'admin' }, { label: '普通用户', value: 'user' }]} />
+            <Select options={[{ label: '管理员', value: 'admin' }, { label: '普通用户', value: 'user' }]} />
           </Form.Item>
           <Form.Item name="points_remaining" label="剩余积分"><Input type="number" /></Form.Item>
         </Form>
