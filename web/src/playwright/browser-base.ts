@@ -29,12 +29,12 @@ export abstract class BrowserBase {
   abstract getUserInfo(): Promise<PlatformUserInfo | null>
   abstract publish(content: PostContent): Promise<PostResult>
 
-  async init(): Promise<void> {
+  async init(headless?: boolean): Promise<void> {
     if (this.context) return
 
-    // Read SHOW_BROWSER from .ENV, default to false (headless mode)
-    const showBrowser = getEnvVar('SHOW_BROWSER', 'false') === 'true'
-    const headless = !showBrowser
+    // For login, always show browser; for other operations, read from .ENV
+    const showBrowser = headless !== undefined ? !headless : getEnvVar('SHOW_BROWSER', 'false') === 'true'
+    const isHeadless = !showBrowser
 
     try {
       // 动态导入 playwright-extra
@@ -43,7 +43,7 @@ export abstract class BrowserBase {
       chromium.use(stealth)
 
       this.context = await chromium.launchPersistentContext(this.userDataDir, {
-        headless,
+        headless: isHeadless,
         args: [
           '--disable-blink-features=AutomationControlled',
           '--no-sandbox',
@@ -57,7 +57,7 @@ export abstract class BrowserBase {
       })
 
       this.page = this.context.pages()[0] || await this.context.newPage()
-      logger.info(`[Browser:${this.platformCode}] Initialized (headless=${headless})`)
+      logger.info(`[Browser:${this.platformCode}] Initialized (headless=${isHeadless})`)
     } catch (error) {
       logger.error(`[Browser:${this.platformCode}] Init failed:`, error)
       throw error
@@ -66,7 +66,11 @@ export abstract class BrowserBase {
 
   async login(): Promise<ApiResponse<PlatformUserInfo>> {
     try {
-      await this.init()
+      // Always show browser for login - need to exit first if already in headless mode
+      if (this.context) {
+        await this.exit()
+      }
+      await this.init(false)
       if (!this.page) throw new Error('Page not initialized')
 
       await this.page.goto(this.loginUrl, { waitUntil: 'domcontentloaded' })
