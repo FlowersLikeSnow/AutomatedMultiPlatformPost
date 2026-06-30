@@ -42,8 +42,7 @@ export function HomePage(): React.ReactElement {
   ]
 
   return (
-    <Card>
-      <h2 className="text-lg font-bold mb-4">首页</h2>
+    <Card className="h-full" title="首页">
 
       <Row gutter={16} className="mb-4">
         <Col span={6}>

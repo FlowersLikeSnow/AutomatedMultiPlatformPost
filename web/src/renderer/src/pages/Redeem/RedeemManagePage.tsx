@@ -55,11 +55,8 @@ export function RedeemManagePage(): React.ReactElement {
   ]
 
   return (
-    <Card>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">券码管理</h2>
-        <Button type="primary" icon={<Plus size={14} />} onClick={() => setModalOpen(true)}>创建券码</Button>
-      </div>
+    <Card className="h-full" title="券码管理"
+      extra={<Button type="primary" icon={<Plus size={14} />} onClick={() => setModalOpen(true)}>创建券码</Button>}>
       <Table<RedeemCode> dataSource={codes} columns={columns} rowKey="id" loading={loading} />
 
       <Modal title="创建兑换码" open={modalOpen} onCancel={() => setModalOpen(false)} onOk={() => form.submit()} destroyOnHidden>

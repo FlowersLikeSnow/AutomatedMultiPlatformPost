@@ -59,11 +59,9 @@ export function TemplateEditPage(): React.ReactElement {
   }
 
   return (
-    <Card>
-      <div className="flex items-center gap-2 mb-4">
-        <Button icon={<ArrowLeft size={14} />} onClick={() => navigate('/templates')}>返回</Button>
-        <h2 className="text-lg font-bold">{isEdit ? '编辑模板' : '新建模板'}</h2>
-      </div>
+    <Card className="h-full"
+      title={isEdit ? '编辑模板' : '新建模板'}
+      extra={<Button icon={<ArrowLeft size={14} />} onClick={() => navigate('/templates')}>返回</Button>}>
       <Form form={form} onFinish={handleSubmit} layout="vertical" className="max-w-2xl">
         <Form.Item name="name" label="模板名称" rules={[{ required: true, message: '请输入模板名称' }]}>
           <Input placeholder="输入模板名称" />

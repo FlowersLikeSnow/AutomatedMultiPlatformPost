@@ -99,8 +99,7 @@ export function OneClickPostPage(): React.ReactElement {
   ]
 
   return (
-    <Card>
-      <h2 className="text-lg font-bold mb-4">一键发帖</h2>
+    <Card className="h-full" title="一键发帖">
       <Steps current={current} items={steps} size="small" className="mb-4" />
 
       <Spin spinning={generating || publishing}>

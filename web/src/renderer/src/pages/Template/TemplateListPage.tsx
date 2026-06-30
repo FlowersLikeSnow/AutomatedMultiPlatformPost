@@ -63,11 +63,8 @@ export function TemplateListPage(): React.ReactElement {
   const filtered = templates.filter((t) => t.name.includes(search))
 
   return (
-    <Card>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">模板管理</h2>
-        <Button type="primary" icon={<Plus size={14} />} onClick={() => navigate('/templates/create')}>新建模板</Button>
-      </div>
+    <Card className="h-full" title="模板管理"
+      extra={<Button type="primary" icon={<Plus size={14} />} onClick={() => navigate('/templates/create')}>新建模板</Button>}>
       <div className="flex items-center gap-4 mb-4">
         <Input prefix={<Search size={14} />} placeholder="搜索模板" value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-sm" />
       </div>

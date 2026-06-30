@@ -40,15 +40,12 @@ export function ConsumptionPage(): React.ReactElement {
   ]
 
   return (
-    <Card>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">消费记录</h2>
-        <Space wrap>
-          <RangePicker onChange={(dates) => setDateRange(dates as [dayjs.Dayjs | null, dayjs.Dayjs | null] | null)} />
-          <Select placeholder="类型筛选" allowClear style={{ width: 150 }} onChange={setTypeFilter}
-            options={Object.entries(typeLabels).map(([k, v]) => ({ label: v, value: k }))} />
-        </Space>
-      </div>
+    <Card className="h-full" title="消费记录">
+      <Space wrap className="mb-4">
+        <RangePicker onChange={(dates) => setDateRange(dates as [dayjs.Dayjs | null, dayjs.Dayjs | null] | null)} />
+        <Select placeholder="类型筛选" allowClear style={{ width: 150 }} onChange={setTypeFilter}
+          options={Object.entries(typeLabels).map(([k, v]) => ({ label: v, value: k }))} />
+      </Space>
       <Table<ConsumptionRecord> dataSource={records} columns={columns} rowKey="id" loading={loading} />
     </Card>
   )

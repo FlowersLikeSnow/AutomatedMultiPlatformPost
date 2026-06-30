@@ -35,8 +35,7 @@ export function SettingsPage(): React.ReactElement {
   }
 
   return (
-    <Card>
-      <h2 className="text-lg font-bold mb-4">设置</h2>
+    <Card className="h-full" title="设置">
 
       <div className="mb-4 pb-4 border-b border-(--border-color)">
         <h3 className="font-medium mb-3">外观设置</h3>

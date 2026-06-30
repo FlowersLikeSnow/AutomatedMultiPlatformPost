@@ -77,8 +77,7 @@ export function PlatformManagePage(): React.ReactElement {
   }
 
   return (
-    <Card>
-      <h2 className="text-lg font-bold mb-4">平台管理</h2>
+    <Card className="h-full" title="平台管理">
       <Spin spinning={loading}>
         <div className="grid grid-cols-3 gap-4">
           {platforms.map((platform) => {

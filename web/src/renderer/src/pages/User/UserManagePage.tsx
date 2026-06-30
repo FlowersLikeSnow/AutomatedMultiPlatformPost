@@ -81,11 +81,9 @@ export function UserManagePage(): React.ReactElement {
   ]
 
   return (
-    <Card>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">用户管理</h2>
-        <Button type="primary" icon={<Plus size={14} />} onClick={handleCreate}>新增用户</Button>
-      </div>
+    <Card className="h-full" title="用户管理"
+      extra={<Button type="primary" icon={<Plus size={14} />} onClick={handleCreate}>新增用户</Button>}>
+
       <Input prefix={<Search size={14} />} placeholder="搜索用户名/手机号" value={search} onChange={(e) => setSearch(e.target.value)} onPressEnter={loadUsers} className="max-w-sm mb-4" />
       <Table<UserInfo> dataSource={users} columns={columns} rowKey="id" loading={loading} />
 
