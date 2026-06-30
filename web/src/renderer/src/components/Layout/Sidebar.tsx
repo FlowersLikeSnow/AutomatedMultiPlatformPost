@@ -1,5 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { Menu } from 'antd'
+import type { MenuProps } from 'antd'
 import { useSnapshot } from 'valtio'
 import { authStore, isAdmin } from '../../stores/authStore'
 import { uiStore } from '../../stores/uiStore'
@@ -16,7 +18,7 @@ import {
   Coins
 } from 'lucide-react'
 
-interface MenuItem {
+interface MenuItemDef {
   key: string
   path: string
   label: string
@@ -24,7 +26,7 @@ interface MenuItem {
   adminOnly?: boolean
 }
 
-const menuItems: MenuItem[] = [
+const menuItems: MenuItemDef[] = [
   { key: 'home', path: '/', label: 'menu.home', icon: <Home size={18} /> },
   { key: 'platform', path: '/platform', label: 'menu.platform', icon: <Monitor size={18} /> },
   { key: 'templates', path: '/templates', label: 'menu.templates', icon: <FileText size={18} /> },
@@ -44,26 +46,44 @@ export function Sidebar(): React.ReactElement {
   const { balance } = useSnapshot(pointsStore)
 
   const userIsAdmin = isAdmin()
-
   const visibleItems = menuItems.filter((item) => !item.adminOnly || userIsAdmin)
+
+  const selectedKey =
+    visibleItems.find(
+      (item) =>
+        item.path === '/'
+          ? location.pathname === '/'
+          : location.pathname.startsWith(item.path)
+    )?.key ?? 'home'
+
+  const menuClick: MenuProps['onClick'] = (e) => {
+    const item = visibleItems.find((i) => i.key === e.key)
+    if (item) navigate(item.path)
+  }
+
+  const antdItems: MenuProps['items'] = visibleItems.map((item) => ({
+    key: item.key,
+    icon: item.icon,
+    label: t(item.label)
+  }))
 
   return (
     <div
-      className={`flex flex-col h-full bg-[var(--sidebar-bg)] border-r border-[var(--border-color)] transition-all duration-200 ${
-        sidebarCollapsed ? 'w-[60px]' : 'w-[220px]'
+      className={`flex flex-col h-full bg-(--sidebar-bg) border-r border-(--border-color) transition-all duration-200 ${
+        sidebarCollapsed ? 'w-15' : 'w-55'
       }`}
     >
       {/* 用户信息区域 */}
-      <div className="flex flex-col items-center p-3 border-b border-[var(--border-color)]">
-        <div className="w-10 h-10 rounded-full bg-[var(--primary-color)] flex items-center justify-center text-white font-bold text-sm">
+      <div className="flex flex-col items-center p-3 border-b border-(--border-color)">
+        <div className="w-10 h-10 rounded-full bg-(--primary-color) flex items-center justify-center text-white font-bold text-sm">
           {currentUser?.username?.[0]?.toUpperCase() || 'U'}
         </div>
         {!sidebarCollapsed && (
           <>
-            <span className="mt-2 text-sm font-medium truncate max-w-full">
+            <span className="mt-2 text-sm font-medium truncate max-w-full text-(--text-color)">
               {currentUser?.username || 'User'}
             </span>
-            <div className="flex items-center gap-1 mt-1 text-xs text-[var(--primary-color)]">
+            <div className="flex items-center gap-1 mt-1 text-xs text-(--primary-color)">
               <Coins size={12} />
               <span>{balance}</span>
             </div>
@@ -71,31 +91,16 @@ export function Sidebar(): React.ReactElement {
         )}
       </div>
 
-      {/* 菜单项 */}
-      <nav className="flex-1 overflow-y-auto py-2">
-        {visibleItems.map((item) => {
-          const isActive =
-            item.path === '/'
-              ? location.pathname === '/'
-              : location.pathname.startsWith(item.path)
-
-          return (
-            <button
-              key={item.key}
-              onClick={() => navigate(item.path)}
-              className={`flex items-center w-full px-4 py-2.5 text-sm transition-colors ${
-                isActive
-                  ? 'text-[var(--primary-color)] bg-[var(--primary-color)]/10 font-medium'
-                  : 'text-[var(--text-color)] hover:bg-black/5 dark:hover:bg-white/5'
-              } ${sidebarCollapsed ? 'justify-center' : 'gap-3'}`}
-              title={sidebarCollapsed ? t(item.label) : undefined}
-            >
-              {item.icon}
-              {!sidebarCollapsed && <span>{t(item.label)}</span>}
-            </button>
-          )
-        })}
-      </nav>
+      {/* antd Menu */}
+      <Menu
+        mode="inline"
+        inlineCollapsed={sidebarCollapsed}
+        selectedKeys={[selectedKey]}
+        items={antdItems}
+        onClick={menuClick}
+        className="flex-1 border-none bg-transparent!"
+        style={{ paddingTop: 8 }}
+      />
     </div>
   )
 }
