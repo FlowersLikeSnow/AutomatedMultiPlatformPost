@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Form, Input, message } from 'antd'
+import { Button, Form, Input, App } from 'antd'
 import { User, Lock, ShieldCheck, Send } from 'lucide-react'
 import { CaptchaCanvas } from '../../components/Login/CaptchaCanvas'
 import { authApi } from '../../api/auth'
@@ -18,6 +18,7 @@ export function AuthLoginPage(): React.ReactElement {
   const [loading, setLoading] = useState(false)
   const [captchaCode, setCaptchaCode] = useState('')
   const navigate = useNavigate()
+  const { message } = App.useApp()
 
   const handleLogin = useCallback(
     async (values: { phone: string; password: string; captcha: string }) => {

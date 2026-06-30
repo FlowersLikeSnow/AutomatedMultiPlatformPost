@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config'
 import { AppModule } from './app.module'
 import { ResponseInterceptor } from './common/interceptors/response.interceptor'
 import { HttpExceptionFilter } from './common/filters/http-exception.filter'
-import { LoggerMiddleware } from './common/middleware/logger.middleware'
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule)
@@ -32,9 +31,6 @@ async function bootstrap(): Promise<void> {
 
   // Global exception filter
   app.useGlobalFilters(new HttpExceptionFilter())
-
-  // Logger middleware
-  app.use(LoggerMiddleware)
 
   const configService = app.get(ConfigService)
   const port = configService.get<number>('PORT', 3000)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Tag, Space, Modal, Form, InputNumber, DatePicker, message } from 'antd'
+import { Table, Button, Tag, Space, Modal, Form, InputNumber, DatePicker, App } from 'antd'
 import { Plus, Copy } from 'lucide-react'
 import { redeemApi } from '../../api/redeem'
 import type { RedeemCode } from '../../types'
@@ -10,6 +10,7 @@ export function RedeemManagePage(): React.ReactElement {
   const [loading, setLoading] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [form] = Form.useForm()
+  const { message } = App.useApp()
 
   useEffect(() => { loadCodes() }, [])
 

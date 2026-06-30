@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Table, Button, Input, Tag, Space, Popconfirm, message } from 'antd'
+import { Table, Button, Input, Tag, Space, Popconfirm, App } from 'antd'
 import { Plus, Search, Edit, Trash2 } from 'lucide-react'
 import { templateApi } from '../../api/templates'
 import type { PostTemplate } from '../../types'
@@ -10,6 +10,7 @@ export function TemplateListPage(): React.ReactElement {
   const [loading, setLoading] = useState(false)
   const [search, setSearch] = useState('')
   const navigate = useNavigate()
+  const { message } = App.useApp()
 
   useEffect(() => {
     loadTemplates()

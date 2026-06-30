@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Input, Tag, Space, Modal, Form, Select, message, Popconfirm } from 'antd'
+import { Table, Button, Input, Tag, Space, Modal, Form, Select, App, Popconfirm } from 'antd'
 import { Search, Plus, Edit, Key } from 'lucide-react'
 import { userApi } from '../../api/users'
 import type { UserInfo } from '../../types'
@@ -12,6 +12,7 @@ export function UserManagePage(): React.ReactElement {
   const [modalOpen, setModalOpen] = useState(false)
   const [editUser, setEditUser] = useState<UserInfo | null>(null)
   const [form] = Form.useForm()
+  const { message } = App.useApp()
 
   useEffect(() => { loadUsers() }, [])
 

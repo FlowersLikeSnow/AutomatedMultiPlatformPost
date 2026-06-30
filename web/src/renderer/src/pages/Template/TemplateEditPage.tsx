@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Form, Input, Button, Select, Tag, message, Card } from 'antd'
+import { Form, Input, Button, Select, Tag, App, Card } from 'antd'
 import { ArrowLeft } from 'lucide-react'
 import { templateApi } from '../../api/templates'
 import type { PostTemplate } from '../../types'
@@ -14,6 +14,7 @@ export function TemplateEditPage(): React.ReactElement {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const isEdit = !!id
+  const { message } = App.useApp()
 
   useEffect(() => {
     if (isEdit) {

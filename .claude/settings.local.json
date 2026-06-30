@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:ant.design)",
-      "Bash(curl -s \"https://ant.design/llms-full.txt\" -o \"F:/workspace/ruisi-product-image-gen/.claude/ant-design-docs.txt\")"
+      "Bash(curl -s \"https://ant.design/llms-full.txt\" -o \"F:/workspace/ruisi-product-image-gen/.claude/ant-design-docs.txt\")",
+      "Bash(node -e \"const Database = require\\('better-sqlite3'\\); const db = new Database\\('./data/app.db'\\); console.log\\(db.prepare\\(\\\\\"SELECT sql FROM sqlite_master WHERE type='table' AND name='users'\\\\\"\\).get\\(\\)\\); db.close\\(\\);\")"
     ]
   }
 }

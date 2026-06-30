@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { message } from 'antd'
 import { clearAuth } from '../stores/authStore'
+import { showMessage } from './message-bridge'
 
 const API_BASE_URL = 'http://localhost:3000/api'
 
@@ -30,7 +30,7 @@ apiClient.interceptors.response.use(
     const result = response.data
     // 如果后端返回 code !== 200，统一处理错误
     if (result.code !== undefined && result.code !== 200) {
-      message.error(result.msg || '请求失败')
+      showMessage('error', result.msg || '请求失败')
       return Promise.reject(new Error(result.msg || '请求失败'))
     }
     return result
@@ -39,10 +39,10 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       clearAuth()
       window.location.hash = '#/auth/login'
-      message.error('登录已过期，请重新登录')
+      showMessage('error', '登录已过期，请重新登录')
     } else {
       const msg = error.response?.data?.msg || error.message || '网络错误'
-      message.error(msg)
+      showMessage('error', msg)
     }
     return Promise.reject(error)
   }

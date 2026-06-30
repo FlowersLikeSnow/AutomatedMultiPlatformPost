@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Form, InputNumber, Button, Switch, message, Divider, Tag } from 'antd'
+import { Card, Form, InputNumber, Button, Switch, App, Divider, Tag } from 'antd'
 import { useSnapshot } from 'valtio'
 import { uiStore, setTheme } from '../../stores/uiStore'
 import { authStore } from '../../stores/authStore'
@@ -13,6 +13,7 @@ export function SettingsPage(): React.ReactElement {
   const { currentUser } = useSnapshot(authStore)
   const [form] = Form.useForm<SettingsForm>()
   const [saving, setSaving] = useState(false)
+  const { message } = App.useApp()
 
   useEffect(() => {
     form.setFieldsValue({ pointsPerPost: 5 })

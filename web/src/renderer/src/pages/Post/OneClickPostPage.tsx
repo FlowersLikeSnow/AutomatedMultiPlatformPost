@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Steps, Card, Button, Select, Checkbox, message, Spin, Input, Tag } from 'antd'
+import { Steps, Card, Button, Select, Checkbox, App, Spin, Input, Tag } from 'antd'
 import { Sparkles, Image, Send } from 'lucide-react'
 import { useSnapshot } from 'valtio'
 import { templateStore } from '../../stores/templateStore'
@@ -25,6 +25,7 @@ export function OneClickPostPage(): React.ReactElement {
 
   const { templates } = useSnapshot(templateStore)
   const { accounts } = useSnapshot(platformStore)
+  const { message } = App.useApp()
 
   const availablePlatforms = (Object.keys(accounts) as PlatformCode[]).filter((code) =>
     isPlatformLoggedIn(code)

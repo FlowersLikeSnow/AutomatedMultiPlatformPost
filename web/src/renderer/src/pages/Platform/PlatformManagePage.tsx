@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Button, Tag, message, Spin } from 'antd'
+import { Card, Button, Tag, App, Spin } from 'antd'
 import { LogIn, LogOut, RefreshCw } from 'lucide-react'
 import type { PlatformCode, PlatformUserInfo, PlatformAccountStatus } from '@shared/types'
 import { platformStore, setPlatformAccount, isPlatformLoggedIn } from '../../stores/platformStore'
@@ -25,6 +25,7 @@ function getPlatformApi(code: PlatformCode) {
 export function PlatformManagePage(): React.ReactElement {
   const { accounts, loading } = useSnapshot(platformStore)
   const [operating, setOperating] = useState<Record<string, boolean>>({})
+  const { message } = App.useApp()
 
   const handleLogin = async (code: PlatformCode): Promise<void> => {
     setOperating((prev) => ({ ...prev, [code]: true }))
