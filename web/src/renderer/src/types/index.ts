@@ -49,6 +49,8 @@ export interface PostRecord {
   error_message?: string
   published_at?: string
   created_at: string
+  image_count?: number
+  word_count?: number
   // Loaded separately via getPlatforms
   platforms?: PostPlatformRecord[]
 }

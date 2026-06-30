@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Tag, Space, Modal, Select, App, Card, Checkbox, Image, Popconfirm } from 'antd'
+import { Table, Button, Tag, Space, Modal, Select, App, Card, Checkbox, Image, Popconfirm, InputNumber } from 'antd'
 import { Plus, Eye, Send, Trash2, RefreshCw } from 'lucide-react'
 import { postApi } from '../../api/posts'
 import { templateApi } from '../../api/templates'
@@ -56,6 +56,8 @@ export function OneClickPostPage(): React.ReactElement {
   const [templates, setTemplates] = useState<PostTemplate[]>([])
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null)
   const [createLoading, setCreateLoading] = useState(false)
+  const [imageCount, setImageCount] = useState<number>(0)
+  const [wordCount, setWordCount] = useState<number>(30)
 
   // View modal state
   const [viewModalOpen, setViewModalOpen] = useState(false)
@@ -105,6 +107,8 @@ export function OneClickPostPage(): React.ReactElement {
   // Create post flow
   const handleOpenCreate = (): void => {
     setSelectedTemplateId(null)
+    setImageCount(0)
+    setWordCount(30)
     setCreateModalOpen(true)
   }
 
@@ -123,7 +127,9 @@ export function OneClickPostPage(): React.ReactElement {
       // Create post with generating status - backend will handle AI generation
       const createRes = await postApi.create({
         template_id: template.id,
-        status: 'generating'
+        status: 'generating',
+        image_count: imageCount,
+        word_count: wordCount
       })
 
       if (createRes.code !== 200 || !createRes.data) {
@@ -386,15 +392,43 @@ export function OneClickPostPage(): React.ReactElement {
         confirmLoading={createLoading}
         destroyOnHidden
       >
-        <div>
-          <label className="block mb-2 font-medium">选择模板</label>
-          <Select
-            placeholder="请选择模板"
-            className="w-full"
-            value={selectedTemplateId}
-            onChange={setSelectedTemplateId}
-            options={templates.map((t) => ({ label: t.name, value: t.id }))}
-          />
+        <div className="space-y-4">
+          <div>
+            <label className="block mb-2 font-medium">选择模板</label>
+            <Select
+              placeholder="请选择模板"
+              className="w-full"
+              value={selectedTemplateId}
+              onChange={setSelectedTemplateId}
+              options={templates.map((t) => ({ label: t.name, value: t.id }))}
+            />
+          </div>
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <label className="block mb-2 font-medium">生成图片</label>
+              <InputNumber
+                min={0}
+                max={9}
+                value={imageCount}
+                onChange={(v) => setImageCount(v || 0)}
+                className="w-full"
+                addonAfter="张"
+                step={1}
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block mb-2 font-medium">字数范围</label>
+              <InputNumber
+                min={10}
+                max={500}
+                value={wordCount}
+                onChange={(v) => setWordCount(v || 30)}
+                className="w-full"
+                addonAfter="字"
+                step={1}
+              />
+            </div>
+          </div>
         </div>
       </Modal>
 

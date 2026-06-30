@@ -62,8 +62,8 @@ export class PostsService {
     this.db
       .getDb()
       .prepare(
-        `INSERT INTO posts (id, user_id, template_id, platform_id, content_text, image_urls, hashtags, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+        `INSERT INTO posts (id, user_id, template_id, platform_id, content_text, image_urls, hashtags, status, image_count, word_count)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
       )
       .run(
         id,
@@ -73,7 +73,9 @@ export class PostsService {
         data.content_text || '',
         JSON.stringify(data.image_urls || []),
         Array.isArray(data.hashtags) ? data.hashtags.join(',') : data.hashtags || '',
-        data.status || 'pending'
+        data.status || 'pending',
+        data.image_count ?? 0,
+        data.word_count ?? 30
       )
 
     // If status is 'generating', trigger async AI generation

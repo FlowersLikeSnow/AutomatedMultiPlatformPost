@@ -297,6 +297,14 @@ export class DatabaseService implements OnModuleInit {
           CREATE INDEX IF NOT EXISTS idx_posts_platform ON posts(platform_id);
           CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
         `
+      },
+      {
+        version: '010',
+        name: 'add_image_count_and_word_count_to_posts',
+        sql: `
+          ALTER TABLE posts ADD COLUMN image_count INTEGER NOT NULL DEFAULT 0;
+          ALTER TABLE posts ADD COLUMN word_count INTEGER NOT NULL DEFAULT 30;
+        `
       }
     ]
   }
