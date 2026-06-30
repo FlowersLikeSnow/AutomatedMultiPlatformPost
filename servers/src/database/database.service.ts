@@ -248,6 +248,55 @@ export class DatabaseService implements OnModuleInit {
             updated_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
           );
         `
+      },
+      {
+        version: '009',
+        name: 'post_platforms_and_nullable_platform',
+        sql: `
+          -- Create post_platforms table for tracking per-platform publish status
+          CREATE TABLE IF NOT EXISTS post_platforms (
+            id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+            post_id TEXT NOT NULL REFERENCES posts(id),
+            platform_id TEXT NOT NULL REFERENCES platforms(id),
+            status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','publishing','published','failed')),
+            platform_post_id TEXT,
+            error_message TEXT,
+            published_at TEXT,
+            created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+          );
+          CREATE INDEX IF NOT EXISTS idx_pp_post ON post_platforms(post_id);
+          CREATE INDEX IF NOT EXISTS idx_pp_platform ON post_platforms(platform_id);
+          CREATE INDEX IF NOT EXISTS idx_pp_status ON post_platforms(status);
+
+          -- Recreate posts table with nullable platform_id and new status values
+          CREATE TABLE IF NOT EXISTS posts_new (
+            id TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+            user_id TEXT NOT NULL REFERENCES users(id),
+            template_id TEXT REFERENCES post_templates(id),
+            platform_id TEXT REFERENCES platforms(id),
+            content_text TEXT,
+            image_urls TEXT DEFAULT '[]',
+            video_url TEXT,
+            hashtags TEXT DEFAULT '[]',
+            status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending', 'generating', 'content_ready', 'publishing', 'published', 'partial_failed', 'failed', 'cancelled')),
+            error_message TEXT,
+            platform_post_id TEXT,
+            published_at TEXT,
+            created_at TEXT NOT NULL DEFAULT (datetime('now', 'localtime'))
+          );
+
+          -- Copy existing data
+          INSERT OR IGNORE INTO posts_new SELECT * FROM posts;
+
+          -- Drop old table and rename new one
+          DROP TABLE IF EXISTS posts;
+          ALTER TABLE posts_new RENAME TO posts;
+
+          -- Recreate indexes
+          CREATE INDEX IF NOT EXISTS idx_posts_user ON posts(user_id);
+          CREATE INDEX IF NOT EXISTS idx_posts_platform ON posts(platform_id);
+          CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
+        `
       }
     ]
   }

@@ -39,12 +39,29 @@ export interface PostTemplate {
 export interface PostRecord {
   id: string
   template_id?: string
-  platform_id: string
+  template_name?: string
+  platform_id?: string
   platform_name?: string
   content_text: string
   image_urls: string
   hashtags: string
-  status: 'pending' | 'generating' | 'publishing' | 'published' | 'failed'
+  status: 'pending' | 'generating' | 'content_ready' | 'publishing' | 'published' | 'partial_failed' | 'failed'
+  error_message?: string
+  published_at?: string
+  created_at: string
+  // Loaded separately via getPlatforms
+  platforms?: PostPlatformRecord[]
+}
+
+// 贴文平台发布记录
+export interface PostPlatformRecord {
+  id: string
+  post_id: string
+  platform_id: string
+  platform_name?: string
+  platform_code?: string
+  status: 'pending' | 'publishing' | 'published' | 'failed'
+  platform_post_id?: string
   error_message?: string
   published_at?: string
   created_at: string
