@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve, isAbsolute } from 'path'
 import { existsSync } from 'fs'
 import { config } from 'dotenv'
 import { app } from 'electron'
@@ -24,6 +24,12 @@ export function loadEnv(): void {
         logger.warn(`Failed to load .ENV from ${envPath}:`, result.error.message)
       } else {
         logger.info(`Loaded .ENV from ${envPath}`)
+        // 将相对路径的 PLAYWRIGHT_BROWSERS_PATH 解析为绝对路径（相对于 .ENV 所在目录）
+        const browsersPath = process.env.PLAYWRIGHT_BROWSERS_PATH
+        if (browsersPath && !isAbsolute(browsersPath)) {
+          process.env.PLAYWRIGHT_BROWSERS_PATH = resolve(resolve(envPath, '..'), browsersPath)
+          logger.info(`Resolved PLAYWRIGHT_BROWSERS_PATH → ${process.env.PLAYWRIGHT_BROWSERS_PATH}`)
+        }
       }
       return
     }

@@ -28,3 +28,6 @@ playwright-profile/
 
 # Generated images
 generated-images/
+
+# Playwright browsers
+.playwright-browsers/
