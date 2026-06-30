@@ -59,7 +59,7 @@ export class BrowserXiaohongshu extends BrowserBase {
       // Step 1: Navigate to publish page
       logger.info('[XHS] Step 1: Navigate to publish page')
       const currentUrl = this.page.url()
-      if (currentUrl.includes('publish/publish')) {
+      if (!currentUrl.includes('publish/publish')) {
         await this.page.goto(this.publishUrl, { timeout: 30000 })
         logger.info('[XHS] Navigated to publish page')
       } else {
@@ -246,15 +246,15 @@ export class BrowserXiaohongshu extends BrowserBase {
         await this.page.waitForTimeout(500)
       }
 
-      // Step 10: Click publish button (ce-btn bg-red)
+      // Step 10: Click publish button (在 xhs-publish-btn 的 shadow DOM 内)
       logger.info('[XHS] Step 10: Click publish button')
-      const publishBtn = await this.page.$('.ce-btn.bg-red')
-      if (publishBtn) {
-        await publishBtn.click()
-        logger.info('[XHS] Clicked publish button')
-      } else {
-        logger.error('[XHS] Publish button not found')
-        return { success: false, error: '找不到发布按钮' }
+      try {
+        // Playwright 的 locator 可以穿透 closed shadow DOM
+        await this.page.locator('xhs-publish-btn >> .ce-btn.bg-red').click()
+        logger.info('[XHS] Clicked publish button via locator')
+      } catch (error) {
+        logger.error('[XHS] Failed to click publish button:', error)
+        return { success: false, error: '发布按钮点击失败' }
       }
 
       // Step 11: Wait for success message
