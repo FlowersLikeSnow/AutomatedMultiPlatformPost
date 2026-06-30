@@ -120,12 +120,9 @@ export abstract class BrowserBase {
 
   async showBrowser(visible: boolean): Promise<ApiResponse<void>> {
     try {
-      if (visible) {
-        await this.init(false)
-      } else {
-        await this.exit()
-        await this.init(true)
-      }
+      // Always exit and re-init with the new headless setting
+      await this.exit()
+      await this.init(!visible)
       return { code: 200 }
     } catch (error) {
       return { code: 500, msg: error instanceof Error ? error.message : '操作失败' }

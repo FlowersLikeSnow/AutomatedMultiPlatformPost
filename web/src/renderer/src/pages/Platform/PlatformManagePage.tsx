@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Card, Button, Tag, App, Spin } from 'antd'
-import { LogIn, LogOut, RefreshCw } from 'lucide-react'
+import { LogIn, LogOut, RefreshCw, Eye, EyeOff } from 'lucide-react'
 import type { PlatformCode, PlatformUserInfo, PlatformAccountStatus } from '@shared/types'
 import { platformStore, setPlatformAccount, isPlatformLoggedIn } from '../../stores/platformStore'
 import { useSnapshot } from 'valtio'
@@ -25,6 +25,7 @@ function getPlatformApi(code: PlatformCode) {
 export function PlatformManagePage(): React.ReactElement {
   const { accounts, loading } = useSnapshot(platformStore)
   const [operating, setOperating] = useState<Record<string, boolean>>({})
+  const [browserVisible, setBrowserVisible] = useState<Record<string, boolean>>({})
   const { message } = App.useApp()
 
   const handleLogin = async (code: PlatformCode): Promise<void> => {
@@ -47,6 +48,7 @@ export function PlatformManagePage(): React.ReactElement {
           status: 'online' as PlatformAccountStatus,
           logged_in_at: new Date().toISOString()
         })
+        setBrowserVisible((prev) => ({ ...prev, [code]: true }))
         message.success(`${platforms.find((p) => p.code === code)?.name} 登录成功`)
       } else {
         message.error(res.msg || '登录失败')
@@ -64,6 +66,18 @@ export function PlatformManagePage(): React.ReactElement {
     await api.logout()
     setPlatformAccount(code, null)
     message.success('已登出')
+  }
+
+  const handleToggleBrowser = async (code: PlatformCode): Promise<void> => {
+    const api = getPlatformApi(code)
+    if (!api) return
+    const visible = !browserVisible[code]
+    try {
+      await api.showBrowser(visible)
+      setBrowserVisible((prev) => ({ ...prev, [code]: visible }))
+    } catch {
+      message.error('切换浏览器可见性失败')
+    }
   }
 
   const getStatusColor = (code: PlatformCode): string => {
@@ -130,6 +144,13 @@ export function PlatformManagePage(): React.ReactElement {
                     onClick={() => handleLogin(platform.code)}
                     loading={operating[platform.code]}
                   />
+                  {loggedIn && (
+                    <Button
+                      icon={browserVisible[platform.code] ? <Eye size={14} /> : <EyeOff size={14} />}
+                      onClick={() => handleToggleBrowser(platform.code)}
+                      title={browserVisible[platform.code] ? '隐藏浏览器' : '显示浏览器'}
+                    />
+                  )}
                 </div>
               </div>
             )
