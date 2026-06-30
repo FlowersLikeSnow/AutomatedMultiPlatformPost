@@ -88,7 +88,7 @@ export class PostsService {
 
   private async generateContentAsync(postId: string, templateId: string): Promise<void> {
     try {
-      // Get template details
+      // Get template details and post's word_count
       const template = this.db
         .getDb()
         .prepare('SELECT * FROM post_templates WHERE id = ?')
@@ -98,12 +98,20 @@ export class PostsService {
         throw new Error('模板不存在')
       }
 
+      const post = this.db
+        .getDb()
+        .prepare('SELECT word_count FROM posts WHERE id = ?')
+        .get(postId) as any
+
+      const wordCount = post?.word_count || 30
+
       // Generate text via AI
       const hashtags = template.hashtags ? template.hashtags.split(',').filter(Boolean) : []
       const result = await this.aiService.generateText({
         prompt: template.text_prompt,
         style: template.image_style,
-        hashtags
+        hashtags,
+        maxTokens: wordCount
       })
 
       // Update post with generated content
@@ -265,7 +273,7 @@ export class PostsService {
         `SELECT p.*, pt.name as template_name, pl.name as platform_name FROM posts p
         LEFT JOIN post_templates pt ON p.template_id = pt.id
         LEFT JOIN platforms pl ON p.platform_id = pl.id
-        WHERE p.user_id = ? ORDER BY p.created_at DESC LIMIT 5`
+        WHERE p.user_id = ? ORDER BY p.created_at DESC LIMIT 10`
       )
       .all(userId)
 

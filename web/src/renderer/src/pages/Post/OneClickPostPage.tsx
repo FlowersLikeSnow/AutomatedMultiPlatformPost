@@ -338,7 +338,7 @@ export function OneClickPostPage(): React.ReactElement {
     {
       title: '操作',
       key: 'actions',
-      width: 200,
+      width: 220,
       render: (_: unknown, record: PostRecord) => {
         const canView = ['content_ready', 'publishing', 'published', 'partial_failed', 'failed'].includes(record.status)
         const canPublish = record.status === 'content_ready'
@@ -412,7 +412,7 @@ export function OneClickPostPage(): React.ReactElement {
                 value={imageCount}
                 onChange={(v) => setImageCount(v || 0)}
                 className="w-full"
-                addonAfter="张"
+                suffix="张"
                 step={1}
               />
             </div>
@@ -424,7 +424,7 @@ export function OneClickPostPage(): React.ReactElement {
                 value={wordCount}
                 onChange={(v) => setWordCount(v || 30)}
                 className="w-full"
-                addonAfter="字"
+                suffix="字"
                 step={1}
               />
             </div>

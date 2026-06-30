@@ -26,15 +26,35 @@ export function HomePage(): React.ReactElement {
     }
   }
 
+  const statusColors: Record<string, string> = {
+    generating: 'orange',
+    content_ready: 'blue',
+    publishing: 'cyan',
+    published: 'green',
+    partial_failed: 'gold',
+    failed: 'red',
+    cancelled: 'default'
+  }
+
+  const statusLabels: Record<string, string> = {
+    generating: '创建中',
+    content_ready: '文案创建完成',
+    publishing: '发布中',
+    published: '发布完成',
+    partial_failed: '部分成功',
+    failed: '失败',
+    cancelled: '已取消'
+  }
+
   const columns = [
-    { title: '平台', dataIndex: 'platform_name', key: 'platform_name' },
+    { title: '模板', dataIndex: 'template_name', key: 'template_name', render: (v: string) => v || '-' },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
       render: (status: string) => (
-        <Tag color={status === 'published' ? 'green' : status === 'failed' ? 'red' : 'default'}>
-          {status}
+        <Tag color={statusColors[status] || 'default'}>
+          {statusLabels[status] || status}
         </Tag>
       )
     },
