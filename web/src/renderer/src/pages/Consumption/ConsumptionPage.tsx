@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Table, Tag, DatePicker, Select, Space } from 'antd'
+import { Table, Tag, DatePicker, Select, Space, Card } from 'antd'
 import { consumptionApi } from '../../api/consumption'
 import type { ConsumptionRecord } from '../../types'
 import dayjs from 'dayjs'
@@ -40,14 +40,16 @@ export function ConsumptionPage(): React.ReactElement {
   ]
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-bold">消费记录</h2>
-      <Space wrap>
-        <RangePicker onChange={(dates) => setDateRange(dates as [dayjs.Dayjs | null, dayjs.Dayjs | null] | null)} />
-        <Select placeholder="类型筛选" allowClear style={{ width: 150 }} onChange={setTypeFilter}
-          options={Object.entries(typeLabels).map(([k, v]) => ({ label: v, value: k }))} />
-      </Space>
+    <Card>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold">消费记录</h2>
+        <Space wrap>
+          <RangePicker onChange={(dates) => setDateRange(dates as [dayjs.Dayjs | null, dayjs.Dayjs | null] | null)} />
+          <Select placeholder="类型筛选" allowClear style={{ width: 150 }} onChange={setTypeFilter}
+            options={Object.entries(typeLabels).map(([k, v]) => ({ label: v, value: k }))} />
+        </Space>
+      </div>
       <Table<ConsumptionRecord> dataSource={records} columns={columns} rowKey="id" loading={loading} />
-    </div>
+    </Card>
   )
 }

@@ -22,7 +22,6 @@ export function SettingsPage(): React.ReactElement {
   const handleSave = async (values: SettingsForm): Promise<void> => {
     setSaving(true)
     try {
-      // TODO: Call backend API to save settings
       message.success('设置已保存')
     } catch {
       message.error('保存失败')
@@ -36,18 +35,20 @@ export function SettingsPage(): React.ReactElement {
   }
 
   return (
-    <div className="space-y-4 max-w-2xl">
-      <h2 className="text-xl font-bold">设置</h2>
+    <Card>
+      <h2 className="text-lg font-bold mb-4">设置</h2>
 
-      <Card title="外观设置">
+      <div className="mb-4 pb-4 border-b border-(--border-color)">
+        <h3 className="font-medium mb-3">外观设置</h3>
         <div className="flex items-center justify-between">
           <span>深色模式</span>
           <Switch checked={theme === 'dark'} onChange={handleThemeChange} />
         </div>
-      </Card>
+      </div>
 
-      <Card title="积分规则">
-        <Form form={form} onFinish={handleSave} layout="vertical">
+      <div className="mb-4 pb-4 border-b border-(--border-color)">
+        <h3 className="font-medium mb-3">积分规则</h3>
+        <Form form={form} onFinish={handleSave} layout="vertical" className="max-w-2xl">
           <Form.Item
             name="pointsPerPost"
             label="每次发帖消耗积分"
@@ -61,35 +62,36 @@ export function SettingsPage(): React.ReactElement {
             </Button>
           </Form.Item>
         </Form>
-      </Card>
+      </div>
 
-      <Card title="系统信息">
-        <div className="space-y-2 text-sm">
+      <div>
+        <h3 className="font-medium mb-3">系统信息</h3>
+        <div className="space-y-2 text-sm max-w-2xl">
           <div className="flex justify-between">
-            <span className="text-gray-500">当前用户</span>
+            <span className="text-(--text-color)/50">当前用户</span>
             <span>{currentUser?.username || '-'}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-500">角色</span>
+            <span className="text-(--text-color)/50">角色</span>
             <Tag color={currentUser?.role === 'super_admin' ? 'red' : currentUser?.role === 'admin' ? 'orange' : 'blue'}>
               {currentUser?.role === 'super_admin' ? '超级管理员' : currentUser?.role === 'admin' ? '管理员' : '普通用户'}
             </Tag>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-500">剩余积分</span>
-            <span className="text-[var(--primary-color)] font-medium">{currentUser?.points_remaining ?? 0}</span>
+            <span className="text-(--text-color)/50">剩余积分</span>
+            <span className="text-(--primary-color) font-medium">{currentUser?.points_remaining ?? 0}</span>
           </div>
-          <Divider />
+          <Divider style={{ margin: '8px 0' }} />
           <div className="flex justify-between">
-            <span className="text-gray-500">应用版本</span>
+            <span className="text-(--text-color)/50">应用版本</span>
             <span>1.0.0</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-500">Electron</span>
+            <span className="text-(--text-color)/50">Electron</span>
             <span>{(window as any)?.process?.versions?.electron || '-'}</span>
           </div>
         </div>
-      </Card>
-    </div>
+      </div>
+    </Card>
   )
 }

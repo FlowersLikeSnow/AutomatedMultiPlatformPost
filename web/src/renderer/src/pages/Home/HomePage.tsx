@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Card, Statistic, Row, Col, Table, Tag } from 'antd'
+import { Card, Statistic, Row, Col, Table, Tag, Divider } from 'antd'
 import { Send, Coins, TrendingUp, Monitor } from 'lucide-react'
 import { postApi } from '../../api/posts'
 import type { DashboardStats, PostRecord } from '../../types'
@@ -42,64 +42,56 @@ export function HomePage(): React.ReactElement {
   ]
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-bold">首页</h2>
+    <Card>
+      <h2 className="text-lg font-bold mb-4">首页</h2>
 
-      <Row gutter={16}>
+      <Row gutter={16} className="mb-4">
         <Col span={6}>
-          <Card>
-            <Statistic
-              title="总发帖数"
-              value={stats?.totalPosts ?? 0}
-              prefix={<Send size={16} />}
-              loading={loading}
-            />
-          </Card>
+          <Statistic
+            title="总发帖数"
+            value={stats?.totalPosts ?? 0}
+            prefix={<Send size={16} />}
+            loading={loading}
+          />
         </Col>
         <Col span={6}>
-          <Card>
-            <Statistic
-              title="积分余额"
-              value={stats?.pointsBalance ?? 0}
-              prefix={<Coins size={16} />}
-              valueStyle={{ color: '#14b8a6' }}
-              loading={loading}
-            />
-          </Card>
+          <Statistic
+            title="积分余额"
+            value={stats?.pointsBalance ?? 0}
+            prefix={<Coins size={16} />}
+            valueStyle={{ color: '#14b8a6' }}
+            loading={loading}
+          />
         </Col>
         <Col span={6}>
-          <Card>
-            <Statistic
-              title="已消耗积分"
-              value={stats?.pointsConsumed ?? 0}
-              prefix={<TrendingUp size={16} />}
-              loading={loading}
-            />
-          </Card>
+          <Statistic
+            title="已消耗积分"
+            value={stats?.pointsConsumed ?? 0}
+            prefix={<TrendingUp size={16} />}
+            loading={loading}
+          />
         </Col>
         <Col span={6}>
-          <Card>
-            <Statistic
-              title="平台状态"
-              value={stats?.platformStatus?.filter((p) => p.status === 'online').length ?? 0}
-              prefix={<Monitor size={16} />}
-              suffix={`/ ${stats?.platformStatus?.length ?? 0}`}
-              loading={loading}
-            />
-          </Card>
+          <Statistic
+            title="平台状态"
+            value={stats?.platformStatus?.filter((p) => p.status === 'online').length ?? 0}
+            prefix={<Monitor size={16} />}
+            suffix={`/ ${stats?.platformStatus?.length ?? 0}`}
+            loading={loading}
+          />
         </Col>
       </Row>
 
-      <Card title="最近发帖">
-        <Table<PostRecord>
-          dataSource={stats?.recentPosts ?? []}
-          columns={columns}
-          rowKey="id"
-          pagination={false}
-          size="small"
-          loading={loading}
-        />
-      </Card>
-    </div>
+      <Divider style={{ margin: '16px 0' }} />
+      <h3 className="font-medium mb-3">最近发帖</h3>
+      <Table<PostRecord>
+        dataSource={stats?.recentPosts ?? []}
+        columns={columns}
+        rowKey="id"
+        pagination={false}
+        size="small"
+        loading={loading}
+      />
+    </Card>
   )
 }

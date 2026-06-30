@@ -18,7 +18,7 @@ const zhCN = {
     templates: '模板管理',
     post: '一键发帖',
     users: '用户管理',
-    redeem: '兑换码管理',
+    redeem: '券码管理',
     consumption: '消费记录',
     settings: '设置'
   },

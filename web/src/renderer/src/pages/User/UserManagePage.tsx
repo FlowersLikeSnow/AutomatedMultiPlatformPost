@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Input, Tag, Space, Modal, Form, Select, App, Popconfirm } from 'antd'
+import { Table, Button, Input, Tag, Space, Modal, Form, Select, App, Popconfirm, Card } from 'antd'
 import { Search, Plus, Edit, Key } from 'lucide-react'
 import { userApi } from '../../api/users'
 import type { UserInfo } from '../../types'
@@ -81,15 +81,15 @@ export function UserManagePage(): React.ReactElement {
   ]
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">用户管理</h2>
+    <Card>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold">用户管理</h2>
         <Button type="primary" icon={<Plus size={14} />} onClick={handleCreate}>新增用户</Button>
       </div>
-      <Input prefix={<Search size={14} />} placeholder="搜索用户名/手机号" value={search} onChange={(e) => setSearch(e.target.value)} onPressEnter={loadUsers} className="max-w-sm" />
+      <Input prefix={<Search size={14} />} placeholder="搜索用户名/手机号" value={search} onChange={(e) => setSearch(e.target.value)} onPressEnter={loadUsers} className="max-w-sm mb-4" />
       <Table<UserInfo> dataSource={users} columns={columns} rowKey="id" loading={loading} />
 
-      <Modal title={editUser ? '编辑用户' : '新增用户'} open={modalOpen} onCancel={() => setModalOpen(false)} onOk={() => form.submit()} destroyOnClose>
+      <Modal title={editUser ? '编辑用户' : '新增用户'} open={modalOpen} onCancel={() => setModalOpen(false)} onOk={() => form.submit()} destroyOnHidden>
         <Form form={form} onFinish={handleSubmit} layout="vertical">
           <Form.Item name="username" label="用户名" rules={[{ required: true }]}><Input /></Form.Item>
           <Form.Item name="phone" label="手机号" rules={[{ required: true }]}><Input /></Form.Item>
@@ -100,6 +100,6 @@ export function UserManagePage(): React.ReactElement {
           <Form.Item name="points_remaining" label="剩余积分"><Input type="number" /></Form.Item>
         </Form>
       </Modal>
-    </div>
+    </Card>
   )
 }

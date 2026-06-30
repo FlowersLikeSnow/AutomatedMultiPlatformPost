@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Form, Input, Button, Select, Tag, App, Card } from 'antd'
+import { Form, Input, Button, Select, App, Card } from 'antd'
 import { ArrowLeft } from 'lucide-react'
 import { templateApi } from '../../api/templates'
 import type { PostTemplate } from '../../types'
@@ -59,36 +59,34 @@ export function TemplateEditPage(): React.ReactElement {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
+    <Card>
+      <div className="flex items-center gap-2 mb-4">
         <Button icon={<ArrowLeft size={14} />} onClick={() => navigate('/templates')}>返回</Button>
-        <h2 className="text-xl font-bold">{isEdit ? '编辑模板' : '新建模板'}</h2>
+        <h2 className="text-lg font-bold">{isEdit ? '编辑模板' : '新建模板'}</h2>
       </div>
-      <Card>
-        <Form form={form} onFinish={handleSubmit} layout="vertical" className="max-w-2xl">
-          <Form.Item name="name" label="模板名称" rules={[{ required: true, message: '请输入模板名称' }]}>
-            <Input placeholder="输入模板名称" />
-          </Form.Item>
-          <Form.Item name="text_prompt" label="文案提示词" rules={[{ required: true, message: '请输入文案提示词' }]}>
-            <Input.TextArea rows={4} placeholder="描述你想要生成的内容，AI 会根据这个提示词生成文案" />
-          </Form.Item>
-          <Form.Item name="category" label="分类">
-            <Select placeholder="选择分类" options={categories.map((c) => ({ label: c, value: c }))} />
-          </Form.Item>
-          <Form.Item name="image_style" label="图片风格">
-            <Select placeholder="选择图片风格" options={imageStyles.map((s) => ({ label: s, value: s }))} />
-          </Form.Item>
-          <Form.Item name="hashtags" label="话题标签">
-            <Select mode="tags" placeholder="输入标签后回车添加" tokenSeparators={[',']} />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading} className="mr-2">
-              {isEdit ? '保存' : '创建'}
-            </Button>
-            <Button onClick={() => navigate('/templates')}>取消</Button>
-          </Form.Item>
-        </Form>
-      </Card>
-    </div>
+      <Form form={form} onFinish={handleSubmit} layout="vertical" className="max-w-2xl">
+        <Form.Item name="name" label="模板名称" rules={[{ required: true, message: '请输入模板名称' }]}>
+          <Input placeholder="输入模板名称" />
+        </Form.Item>
+        <Form.Item name="text_prompt" label="文案提示词" rules={[{ required: true, message: '请输入文案提示词' }]}>
+          <Input.TextArea rows={4} placeholder="描述你想要生成的内容，AI 会根据这个提示词生成文案" />
+        </Form.Item>
+        <Form.Item name="category" label="分类">
+          <Select placeholder="选择分类" options={categories.map((c) => ({ label: c, value: c }))} />
+        </Form.Item>
+        <Form.Item name="image_style" label="图片风格">
+          <Select placeholder="选择图片风格" options={imageStyles.map((s) => ({ label: s, value: s }))} />
+        </Form.Item>
+        <Form.Item name="hashtags" label="话题标签">
+          <Select mode="tags" placeholder="输入标签后回车添加" tokenSeparators={[',']} />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" loading={loading} className="mr-2">
+            {isEdit ? '保存' : '创建'}
+          </Button>
+          <Button onClick={() => navigate('/templates')}>取消</Button>
+        </Form.Item>
+      </Form>
+    </Card>
   )
 }

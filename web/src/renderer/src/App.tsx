@@ -37,10 +37,18 @@ function App(): React.ReactElement {
     <ConfigProvider
       locale={zhCN}
       theme={{
-        algorithm: theme === 'dark' ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
+        algorithm: theme === 'dark'
+          ? [antTheme.darkAlgorithm, antTheme.compactAlgorithm]
+          : antTheme.compactAlgorithm,
         token: {
           colorPrimary: '#14b8a6',
-          borderRadius: 8
+          borderRadius: 6
+        },
+        components: {
+          Menu: {
+            iconSize: 16,
+            fontSize: 13
+          }
         }
       }}
     >

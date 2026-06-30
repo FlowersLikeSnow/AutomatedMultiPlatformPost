@@ -77,8 +77,8 @@ export function PlatformManagePage(): React.ReactElement {
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-xl font-bold">平台管理</h2>
+    <Card>
+      <h2 className="text-lg font-bold mb-4">平台管理</h2>
       <Spin spinning={loading}>
         <div className="grid grid-cols-3 gap-4">
           {platforms.map((platform) => {
@@ -88,20 +88,23 @@ export function PlatformManagePage(): React.ReactElement {
               : null
 
             return (
-              <Card key={platform.code} className="text-center">
+              <div
+                key={platform.code}
+                className="text-center p-4 rounded-lg border border-(--border-color) bg-(--bg-color)"
+              >
                 <div
-                  className="w-16 h-16 mx-auto rounded-full flex items-center justify-center text-white text-2xl font-bold mb-4"
+                  className="w-14 h-14 mx-auto rounded-full flex items-center justify-center text-white text-xl font-bold mb-3"
                   style={{ backgroundColor: platform.color }}
                 >
                   {platform.name[0]}
                 </div>
-                <h3 className="text-lg font-medium mb-2">{platform.name}</h3>
-                <Tag color={getStatusColor(platform.code)} className="mb-4">
+                <h3 className="text-base font-medium mb-1.5">{platform.name}</h3>
+                <Tag color={getStatusColor(platform.code)} className="mb-3">
                   {getStatusText(platform.code)}
                 </Tag>
 
                 {userInfo?.nickname && (
-                  <p className="text-sm text-gray-500 mb-4">{userInfo.nickname}</p>
+                  <p className="text-sm text-(--text-color)/50 mb-3">{userInfo.nickname}</p>
                 )}
 
                 <div className="flex gap-2 justify-center">
@@ -129,11 +132,11 @@ export function PlatformManagePage(): React.ReactElement {
                     loading={operating[platform.code]}
                   />
                 </div>
-              </Card>
+              </div>
             )
           })}
         </div>
       </Spin>
-    </div>
+    </Card>
   )
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Table, Button, Tag, Space, Modal, Form, InputNumber, DatePicker, App } from 'antd'
+import { Table, Button, Tag, Space, Modal, Form, InputNumber, DatePicker, App, Card } from 'antd'
 import { Plus, Copy } from 'lucide-react'
 import { redeemApi } from '../../api/redeem'
 import type { RedeemCode } from '../../types'
@@ -55,14 +55,14 @@ export function RedeemManagePage(): React.ReactElement {
   ]
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold">兑换码管理</h2>
-        <Button type="primary" icon={<Plus size={14} />} onClick={() => setModalOpen(true)}>创建兑换码</Button>
+    <Card>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-bold">券码管理</h2>
+        <Button type="primary" icon={<Plus size={14} />} onClick={() => setModalOpen(true)}>创建券码</Button>
       </div>
       <Table<RedeemCode> dataSource={codes} columns={columns} rowKey="id" loading={loading} />
 
-      <Modal title="创建兑换码" open={modalOpen} onCancel={() => setModalOpen(false)} onOk={() => form.submit()} destroyOnClose>
+      <Modal title="创建兑换码" open={modalOpen} onCancel={() => setModalOpen(false)} onOk={() => form.submit()} destroyOnHidden>
         <Form form={form} onFinish={handleCreate} layout="vertical">
           <Form.Item name="pointsValue" label="积分值" rules={[{ required: true, message: '请输入积分值' }]}>
             <InputNumber min={1} className="w-full" />
@@ -75,6 +75,6 @@ export function RedeemManagePage(): React.ReactElement {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </Card>
   )
 }
