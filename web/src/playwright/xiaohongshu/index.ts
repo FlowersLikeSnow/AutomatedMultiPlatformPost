@@ -12,7 +12,7 @@ export class BrowserXiaohongshu extends BrowserBase {
   }
 
   get homeUrl(): string {
-    return 'https://creator.xiaohongshu.com/creator/home'
+    return 'https://creator.xiaohongshu.com/new/home'
   }
 
   get publishUrl(): string {
