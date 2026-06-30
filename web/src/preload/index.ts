@@ -46,9 +46,7 @@ const electronAPI = {
     checkLoginStatus: (): Promise<ApiResponse<{ loggedIn: boolean }>> =>
       ipcRenderer.invoke(IPC_CHANNELS.XHS_CHECK_LOGIN_STATUS),
     publish: (content: PostContent): Promise<ApiResponse<PostResult>> =>
-      ipcRenderer.invoke(IPC_CHANNELS.XHS_PUBLISH, content),
-    showBrowser: (visible: boolean): Promise<ApiResponse<void>> =>
-      ipcRenderer.invoke(IPC_CHANNELS.XHS_SHOW_BROWSER, visible)
+      ipcRenderer.invoke(IPC_CHANNELS.XHS_PUBLISH, content)
   },
 
   // 抖音
@@ -60,9 +58,7 @@ const electronAPI = {
     checkLoginStatus: (): Promise<ApiResponse<{ loggedIn: boolean }>> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOUYIN_CHECK_LOGIN_STATUS),
     publish: (content: PostContent): Promise<ApiResponse<PostResult>> =>
-      ipcRenderer.invoke(IPC_CHANNELS.DOUYIN_PUBLISH, content),
-    showBrowser: (visible: boolean): Promise<ApiResponse<void>> =>
-      ipcRenderer.invoke(IPC_CHANNELS.DOUYIN_SHOW_BROWSER, visible)
+      ipcRenderer.invoke(IPC_CHANNELS.DOUYIN_PUBLISH, content)
   },
 
   // 快手
@@ -74,9 +70,7 @@ const electronAPI = {
     checkLoginStatus: (): Promise<ApiResponse<{ loggedIn: boolean }>> =>
       ipcRenderer.invoke(IPC_CHANNELS.KUAISHOU_CHECK_LOGIN_STATUS),
     publish: (content: PostContent): Promise<ApiResponse<PostResult>> =>
-      ipcRenderer.invoke(IPC_CHANNELS.KUAISHOU_PUBLISH, content),
-    showBrowser: (visible: boolean): Promise<ApiResponse<void>> =>
-      ipcRenderer.invoke(IPC_CHANNELS.KUAISHOU_SHOW_BROWSER, visible)
+      ipcRenderer.invoke(IPC_CHANNELS.KUAISHOU_PUBLISH, content)
   },
 
   // AI

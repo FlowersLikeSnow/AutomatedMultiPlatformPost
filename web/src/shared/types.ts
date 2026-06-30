@@ -27,7 +27,6 @@ export enum IPC_CHANNELS {
   XHS_GET_USER_INFO = 'xhs:get_user_info',
   XHS_CHECK_LOGIN_STATUS = 'xhs:check_login_status',
   XHS_PUBLISH = 'xhs:publish',
-  XHS_SHOW_BROWSER = 'xhs:show_browser',
 
   // 抖音
   DOUYIN_LOGIN = 'douyin:login',
@@ -35,7 +34,6 @@ export enum IPC_CHANNELS {
   DOUYIN_GET_USER_INFO = 'douyin:get_user_info',
   DOUYIN_CHECK_LOGIN_STATUS = 'douyin:check_login_status',
   DOUYIN_PUBLISH = 'douyin:publish',
-  DOUYIN_SHOW_BROWSER = 'douyin:show_browser',
 
   // 快手
   KUAISHOU_LOGIN = 'kuaishou:login',
@@ -43,7 +41,6 @@ export enum IPC_CHANNELS {
   KUAISHOU_GET_USER_INFO = 'kuaishou:get_user_info',
   KUAISHOU_CHECK_LOGIN_STATUS = 'kuaishou:check_login_status',
   KUAISHOU_PUBLISH = 'kuaishou:publish',
-  KUAISHOU_SHOW_BROWSER = 'kuaishou:show_browser',
 
   // AI 图片生成
   AI_GENERATE_IMAGE = 'ai:generate_image',
@@ -178,7 +175,6 @@ export interface ElectronAPI {
     getUserInfo: () => Promise<ApiResponse<PlatformUserInfo>>
     checkLoginStatus: () => Promise<ApiResponse<{ loggedIn: boolean }>>
     publish: (content: PostContent) => Promise<ApiResponse<PostResult>>
-    showBrowser: (visible: boolean) => Promise<ApiResponse<void>>
   }
 
   douyin: {
@@ -187,7 +183,6 @@ export interface ElectronAPI {
     getUserInfo: () => Promise<ApiResponse<PlatformUserInfo>>
     checkLoginStatus: () => Promise<ApiResponse<{ loggedIn: boolean }>>
     publish: (content: PostContent) => Promise<ApiResponse<PostResult>>
-    showBrowser: (visible: boolean) => Promise<ApiResponse<void>>
   }
 
   kuaishou: {
@@ -196,7 +191,6 @@ export interface ElectronAPI {
     getUserInfo: () => Promise<ApiResponse<PlatformUserInfo>>
     checkLoginStatus: () => Promise<ApiResponse<{ loggedIn: boolean }>>
     publish: (content: PostContent) => Promise<ApiResponse<PostResult>>
-    showBrowser: (visible: boolean) => Promise<ApiResponse<void>>
   }
 
   // AI

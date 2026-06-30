@@ -57,12 +57,6 @@ class PlaywrightManager {
       : { code: 500, data: result, msg: result.error }
   }
 
-  async showBrowser(code: PlatformCode, visible: boolean): Promise<ApiResponse<void>> {
-    const browser = this.getBrowser(code)
-    if (!browser) return { code: 400, msg: `Unknown platform: ${code}` }
-    return browser.showBrowser(visible)
-  }
-
   async exitAll(): Promise<void> {
     logger.info('[PlaywrightManager] Exiting all browsers...')
     const promises: Promise<void>[] = []
