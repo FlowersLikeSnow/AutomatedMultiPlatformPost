@@ -62,11 +62,11 @@ function App(): React.ReactElement {
                   <Route path="/templates/:id/edit" element={<TemplateEditPage />} />
                   <Route path="/post" element={<OneClickPostPage />} />
                   <Route path="/settings" element={<SettingsPage />} />
-                </Route>
-                <Route element={<AdminRoute />}>
-                  <Route path="/users" element={<UserManagePage />} />
-                  <Route path="/redeem" element={<RedeemManagePage />} />
-                  <Route path="/consumption" element={<ConsumptionPage />} />
+                  <Route element={<AdminRoute />}>
+                    <Route path="/users" element={<UserManagePage />} />
+                    <Route path="/redeem" element={<RedeemManagePage />} />
+                    <Route path="/consumption" element={<ConsumptionPage />} />
+                  </Route>
                 </Route>
               </Route>
             </Route>

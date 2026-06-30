@@ -1,9 +1,9 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Menu } from 'antd'
+import { Menu, Popconfirm } from 'antd'
 import type { MenuProps } from 'antd'
 import { useSnapshot } from 'valtio'
-import { authStore, isAdmin } from '../../stores/authStore'
+import { authStore, isAdmin, clearAuth } from '../../stores/authStore'
 import { uiStore } from '../../stores/uiStore'
 import { pointsStore } from '../../stores/pointsStore'
 import {
@@ -15,7 +15,8 @@ import {
   Ticket,
   Receipt,
   Settings,
-  Coins
+  Coins,
+  LogOut
 } from 'lucide-react'
 
 interface MenuItemDef {
@@ -87,7 +88,36 @@ export function Sidebar(): React.ReactElement {
               <Coins size={12} />
               <span>{balance}</span>
             </div>
+            <Popconfirm
+              title="确定退出登录？"
+              onConfirm={() => {
+                clearAuth()
+                navigate('/auth/login')
+              }}
+              okText="退出"
+              cancelText="取消"
+            >
+              <button className="mt-2 flex items-center gap-1 text-xs text-(--text-color)/50 hover:text-red-500 transition-colors cursor-pointer">
+                <LogOut size={12} />
+                <span>退出登录</span>
+              </button>
+            </Popconfirm>
           </>
+        )}
+        {sidebarCollapsed && (
+          <Popconfirm
+            title="确定退出登录？"
+            onConfirm={() => {
+              clearAuth()
+              navigate('/auth/login')
+            }}
+            okText="退出"
+            cancelText="取消"
+          >
+            <button className="mt-2 text-(--text-color)/50 hover:text-red-500 transition-colors cursor-pointer" title="退出登录">
+              <LogOut size={16} />
+            </button>
+          </Popconfirm>
         )}
       </div>
 
