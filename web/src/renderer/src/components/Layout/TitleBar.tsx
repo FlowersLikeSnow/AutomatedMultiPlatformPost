@@ -1,10 +1,6 @@
-import { Minus, Maximize2, X, Menu } from 'lucide-react'
-import { useSnapshot } from 'valtio'
-import { uiStore, toggleSidebar } from '../../stores/uiStore'
+import { Minus, Maximize2, X } from 'lucide-react'
 
 export function TitleBar(): React.ReactElement {
-  const { sidebarCollapsed } = useSnapshot(uiStore)
-
   const handleMinimize = (): void => {
     window.app?.minimize()
   }
@@ -22,14 +18,7 @@ export function TitleBar(): React.ReactElement {
       className="flex items-center justify-between h-9 bg-(--titlebar-bg) border-b border-(--border-color) select-none"
       style={{ WebkitAppRegion: 'drag' } as React.CSSProperties}
     >
-      <div className="flex items-center gap-2 pl-3" style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}>
-        <button
-          onClick={toggleSidebar}
-          className="flex items-center justify-center w-7 h-7 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-          title={sidebarCollapsed ? '展开侧边栏' : '收起侧边栏'}
-        >
-          <Menu size={16} />
-        </button>
+      <div className="flex items-center pl-3">
         <span className="text-sm font-semibold text-(--primary-color)">
           多平台自动发帖
         </span>
