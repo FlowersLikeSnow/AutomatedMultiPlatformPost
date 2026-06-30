@@ -39,7 +39,7 @@ export function OneClickPostPage(): React.ReactElement {
       const textRes = await aiApi.generateText({
         prompt: selectedTemplate.text_prompt,
         style: selectedTemplate.image_style,
-        hashtags: JSON.parse(selectedTemplate.hashtags || '[]')
+        hashtags: selectedTemplate.hashtags ? selectedTemplate.hashtags.split(',').filter(Boolean) : []
       }) as { code: number; data?: { text: string }; msg?: string }
 
       if (textRes.code === 200 && textRes.data) {
@@ -73,7 +73,7 @@ export function OneClickPostPage(): React.ReactElement {
         const res = await api.publish({
           text: generatedText,
           imagePaths: generatedImages,
-          hashtags: selectedTemplate ? JSON.parse(selectedTemplate.hashtags || '[]') : []
+          hashtags: selectedTemplate ? selectedTemplate.hashtags.split(',').filter(Boolean) : []
         })
 
         if (res.code === 200) {

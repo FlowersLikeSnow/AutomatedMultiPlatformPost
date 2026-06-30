@@ -45,23 +45,25 @@ export function SettingsPage(): React.ReactElement {
         </div>
       </div>
 
-      <div className="mb-4 pb-4 border-b border-(--border-color)">
-        <h3 className="font-medium mb-3">积分规则</h3>
-        <Form form={form} onFinish={handleSave} layout="vertical" className="max-w-2xl">
-          <Form.Item
-            name="pointsPerPost"
-            label="每次发帖消耗积分"
-            rules={[{ required: true, message: '请输入每次发帖消耗的积分' }]}
-          >
-            <InputNumber min={1} max={1000} className="w-full" addonAfter="积分/次" />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={saving}>
-              保存设置
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+      {(currentUser?.role === 'super_admin' || currentUser?.role === 'admin') && (
+        <div className="mb-4 pb-4 border-b border-(--border-color)">
+          <h3 className="font-medium mb-3">积分规则</h3>
+          <Form form={form} onFinish={handleSave} layout="vertical" className="max-w-2xl">
+            <Form.Item
+              name="pointsPerPost"
+              label="每次发帖消耗积分"
+              rules={[{ required: true, message: '请输入每次发帖消耗的积分' }]}
+            >
+              <InputNumber min={1} max={1000} className="w-full" addonAfter="积分/次" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" loading={saving}>
+                保存设置
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      )}
 
       <div>
         <h3 className="font-medium mb-3">系统信息</h3>

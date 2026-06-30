@@ -29,7 +29,7 @@ export class TemplatesService {
     this.db.getDb().prepare(`
       INSERT INTO post_templates (id, user_id, name, text_prompt, image_style, hashtags, category)
       VALUES (?, ?, ?, ?, ?, ?, ?)
-    `).run(id, userId, data.name, data.text_prompt || '', data.image_style || '', JSON.stringify(data.hashtags || []), data.category || 'general')
+    `).run(id, userId, data.name, data.text_prompt || '', data.image_style || '', data.hashtags || '', data.category || 'general')
     return this.findById(id)
   }
 
@@ -43,7 +43,7 @@ export class TemplatesService {
     if (data.name) { updates.push('name = ?'); values.push(data.name) }
     if (data.text_prompt !== undefined) { updates.push('text_prompt = ?'); values.push(data.text_prompt) }
     if (data.image_style !== undefined) { updates.push('image_style = ?'); values.push(data.image_style) }
-    if (data.hashtags !== undefined) { updates.push('hashtags = ?'); values.push(JSON.stringify(data.hashtags)) }
+    if (data.hashtags !== undefined) { updates.push('hashtags = ?'); values.push(data.hashtags) }
     if (data.category !== undefined) { updates.push('category = ?'); values.push(data.category) }
     updates.push("updated_at = datetime('now', 'localtime')")
     values.push(id)

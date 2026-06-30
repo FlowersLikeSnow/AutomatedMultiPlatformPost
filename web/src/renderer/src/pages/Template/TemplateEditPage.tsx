@@ -28,7 +28,7 @@ export function TemplateEditPage(): React.ReactElement {
       if (res.code === 200 && res.data) {
         form.setFieldsValue({
           ...res.data,
-          hashtags: JSON.parse(res.data.hashtags || '[]')
+          hashtags: res.data.hashtags?.split(',') || []
         })
       }
     } catch {
@@ -38,10 +38,11 @@ export function TemplateEditPage(): React.ReactElement {
 
   const handleSubmit = async (values: Record<string, unknown>): Promise<void> => {
     setLoading(true)
+    console.log('values:', values)
     try {
       const data = {
         ...values,
-        hashtags: JSON.stringify(values.hashtags || [])
+        hashtags: (values.hashtags as string[]).join(',') || ''
       }
       if (isEdit) {
         await templateApi.update(id!, data)

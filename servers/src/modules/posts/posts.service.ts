@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { DatabaseService } from '../../database/database.service'
 import { v4 as uuid } from 'uuid'
 
@@ -39,7 +39,7 @@ export class PostsService {
     this.db.getDb().prepare(`
       INSERT INTO posts (id, user_id, template_id, platform_id, content_text, image_urls, hashtags, status)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(id, userId, data.template_id || null, data.platform_id, data.content_text || '', JSON.stringify(data.image_urls || []), JSON.stringify(data.hashtags || []), data.status || 'pending')
+    `).run(id, userId, data.template_id || null, data.platform_id, data.content_text || '', JSON.stringify(data.image_urls || []), Array.isArray(data.hashtags) ? data.hashtags.join(',') : (data.hashtags || ''), data.status || 'pending')
     return this.findById(id)
   }
 
