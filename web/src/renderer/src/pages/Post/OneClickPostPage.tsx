@@ -180,10 +180,6 @@ export function OneClickPostPage(): React.ReactElement {
 
   const handlePublish = async (): Promise<void> => {
     if (!publishPost) return
-    if (selectedImages.length === 0) {
-      message.warning('请至少选择一张图片')
-      return
-    }
     if (selectedPlatforms.length === 0) {
       message.warning('请至少选择一个平台')
       return
@@ -341,7 +337,7 @@ export function OneClickPostPage(): React.ReactElement {
       width: 220,
       render: (_: unknown, record: PostRecord) => {
         const canView = ['content_ready', 'publishing', 'published', 'partial_failed', 'failed'].includes(record.status)
-        const canPublish = record.status === 'content_ready'
+        const canPublish = ['content_ready', 'partial_failed', 'failed'].includes(record.status)
         return (
           <Space>
             {canView && (
@@ -351,7 +347,7 @@ export function OneClickPostPage(): React.ReactElement {
             )}
             {canPublish && (
               <Button type="link" icon={<Send size={14} />} onClick={() => handleOpenPublish(record)}>
-                发布
+                {record.status === 'content_ready' ? '发布' : '重新发布'}
               </Button>
             )}
             <Popconfirm title="确定删除该贴文？" onConfirm={() => handleDelete(record)} okText="确定" cancelText="取消">
