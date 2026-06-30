@@ -1,4 +1,5 @@
 import { IsString, IsNotEmpty, IsOptional, IsNumber, Min } from 'class-validator'
+import { Type } from 'class-transformer'
 
 export class CreateUserDto {
   @IsString()
@@ -17,8 +18,9 @@ export class CreateUserDto {
   @IsOptional()
   role?: string
 
-  @IsNumber()
   @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
   @Min(0)
   points_remaining?: number
 }
