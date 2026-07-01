@@ -256,9 +256,9 @@ export class BrowserXiaohongshu extends BrowserBase {
 
         // Tab 切换，从 xhs-publish-btn 开始，按 Tab 找到内部发布按钮
         let found = false
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 20; i++) {
           await this.page.keyboard.press('Tab')
-          await this.page.waitForTimeout(200)
+          await this.page.waitForTimeout(100)
 
           const isPublishBtn = await this.page.evaluate(() => {
             const el = document.activeElement
