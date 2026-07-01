@@ -87,7 +87,7 @@ export class BrowserXiaohongshu extends BrowserBase {
       } catch (error) {
         logger.error('[XHS] Failed to click "上传图文":', error)
       }
-      await this.page.waitForTimeout(2000)
+      await this.page.waitForSelector('.image-upload-buttons', { timeout: 10000 })
 
       // Step 2: Check for image upload buttons
       logger.info('[XHS] Step 2: Check image upload buttons')
@@ -105,7 +105,6 @@ export class BrowserXiaohongshu extends BrowserBase {
         logger.info('[XHS] Step 3: Has images, clicking "生成图片" button')
         await uploadButtons[0].click()
         logger.info('[XHS] Clicked "生成图片" button')
-        await this.page.waitForTimeout(2000)
 
         // Wait for cover list and randomly select one
         logger.info('[XHS] Step 3.1: Wait for cover list and select one')
@@ -116,7 +115,8 @@ export class BrowserXiaohongshu extends BrowserBase {
           await coverItems[randomIndex].click()
           logger.info(`[XHS] Selected cover item ${randomIndex + 1}/${coverItems.length}`)
         }
-        await this.page.waitForTimeout(1000)
+        // Wait for confirm button to appear
+        await this.page.waitForSelector('.overview-footer button', { timeout: 10000 })
 
         // Click confirm button under overview-footer
         logger.info('[XHS] Step 3.2: Click confirm button')
@@ -125,14 +125,15 @@ export class BrowserXiaohongshu extends BrowserBase {
           await confirmBtn.click()
           logger.info('[XHS] Clicked confirm button')
         }
-        await this.page.waitForTimeout(2000)
+        // Wait for image upload area to appear
+        await this.page.waitForSelector('text=添加图片', { timeout: 10000 })
 
         // Upload images at the bottom
         logger.info('[XHS] Step 3.3: Upload images')
         const addImageBtn = await this.page.$('text=添加图片')
         if (addImageBtn) {
           await addImageBtn.click()
-          await this.page.waitForTimeout(1000)
+          await this.page.waitForSelector('input[type="file"]', { timeout: 5000 })
         }
 
         // Find file input and upload images
@@ -140,7 +141,8 @@ export class BrowserXiaohongshu extends BrowserBase {
         if (fileInput && content.imagePaths.length > 0) {
           await fileInput.setInputFiles(content.imagePaths)
           logger.info(`[XHS] Uploaded ${content.imagePaths.length} images`)
-          await this.page.waitForTimeout(3000)
+          // Wait for upload to complete (wait for image count or preview to appear)
+          await this.page.waitForTimeout(2000)
         }
       } else {
         // No images: click second button "文字配图"
@@ -160,8 +162,9 @@ export class BrowserXiaohongshu extends BrowserBase {
         await editorParagraph.fill(textWithoutHashtags)
         logger.info(`[XHS] Filled content: "${textWithoutHashtags.substring(0, 50)}..."`)
       }
-      await this.page.waitForTimeout(1000)
-
+      // Wait for "生成图片" button to be available
+      await this.page.waitForSelector('.edit-text-button-text', { timeout: 10000 })
+      await this.page.waitForTimeout(300)
       // Step 5: Click "生成图片" part (edit-text-button-text)
       logger.info('[XHS] Step 5: Click "生成图片" button')
       const generateImageBtn = await this.page.$('.edit-text-button-text')
@@ -169,7 +172,6 @@ export class BrowserXiaohongshu extends BrowserBase {
         await generateImageBtn.click()
         logger.info('[XHS] Clicked "生成图片" button')
       }
-      await this.page.waitForTimeout(2000)
 
       // Step 6: Wait for cover list and randomly select one (only if no images originally)
       if (!hasImages) {
@@ -183,7 +185,8 @@ export class BrowserXiaohongshu extends BrowserBase {
         } else {
           logger.warn('[XHS] No cover items found')
         }
-        await this.page.waitForTimeout(1000)
+        // Wait for confirm button to appear
+        await this.page.waitForSelector('.overview-footer button', { timeout: 10000 })
 
         // Step 7: Click button under overview-footer
         logger.info('[XHS] Step 7: Click confirm button')
@@ -192,7 +195,6 @@ export class BrowserXiaohongshu extends BrowserBase {
           await confirmBtn.click()
           logger.info('[XHS] Clicked confirm button')
         }
-        await this.page.waitForTimeout(2000)
       }
 
       // Step 8: Wait for markers-container
@@ -219,37 +221,36 @@ export class BrowserXiaohongshu extends BrowserBase {
         const proseMirror = await this.page.$('.ProseMirror')
         if (proseMirror) {
           await proseMirror.click()
-          await this.page.waitForTimeout(100)
           // Ctrl+End 将光标移到编辑器末尾
           await this.page.keyboard.press('Control+End')
-          await this.page.waitForTimeout(100)
         }
 
         // 输入标签（前后加空格分隔）
         await this.page.keyboard.type(` #${tag} `)
-        await this.page.waitForTimeout(500)
 
         // 等待话题建议出现
         try {
           await this.page.waitForSelector('#creator-editor-topic-container', { timeout: 2000 })
           const topicContainer = await this.page.$('#creator-editor-topic-container')
           if (topicContainer) {
-            const firstItem = await topicContainer.$('.item')
-            if (firstItem) {
-              await firstItem.click()
-              logger.info(`[XHS] Selected topic suggestion for: #${tag}`)
-              await this.page.waitForTimeout(100)
-            } else {
-              await this.page.keyboard.press('Enter')
-              logger.info(`[XHS] No suggestion item, pressed Enter for: #${tag}`)
-            }
+            // 等待 .item 元素出现
+            await topicContainer.waitForSelector('.item', { timeout: 2000 })
+            await this.page.waitForTimeout(500)
+            await this.page.keyboard.press('Enter')
+            logger.info(`[XHS] No suggestion item, pressed Enter for: #${tag}`)
+            
           }
         } catch {
           // 话题建议未出现，直接按 Enter
           await this.page.keyboard.press('Enter')
           logger.info(`[XHS] Topic container not found, pressed Enter for: #${tag}`)
         }
-        await this.page.waitForTimeout(500)
+        // Wait for topic container to disappear before next hashtag
+        try {
+          await this.page.waitForSelector('#creator-editor-topic-container', { state: 'hidden', timeout: 1000 })
+        } catch {
+          // Container already hidden or not present
+        }
       }
 
       // Step 9.5 智能标题
@@ -263,6 +264,8 @@ export class BrowserXiaohongshu extends BrowserBase {
         await this.page.waitForSelector('.title-dropdown-container', { timeout: 5000 })
         const titleDropdownContainer = await this.page.$('.title-dropdown-container')
         if (titleDropdownContainer) {
+          // 等待 .item 元素出现
+          await titleDropdownContainer.waitForSelector('.item', { timeout: 2000 })
           const items = await titleDropdownContainer.$$('.item')
           if (items.length > 0) {
             const randomIndex = Math.floor(Math.random() * items.length)
@@ -281,13 +284,11 @@ export class BrowserXiaohongshu extends BrowserBase {
         // 先点击 xhs-publish-btn 元素，将焦点设在发布按钮区域
         await this.page.locator('xhs-publish-btn').click()
         logger.info('[XHS] Clicked xhs-publish-btn element')
-        await this.page.waitForTimeout(300)
 
         // Tab 切换，从 xhs-publish-btn 开始，按 Tab 找到内部发布按钮
         let found = false
         for (let i = 0; i < 20; i++) {
           await this.page.keyboard.press('Tab')
-          await this.page.waitForTimeout(100)
 
           const isPublishBtn = await this.page.evaluate(() => {
             const el = document.activeElement
