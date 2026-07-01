@@ -66,6 +66,41 @@ export function PlatformManagePage(): React.ReactElement {
     message.success('已登出')
   }
 
+  const handleCheckLogin = async (code: PlatformCode): Promise<void> => {
+    setOperating((prev) => ({ ...prev, [code]: true }))
+    try {
+      const api = getPlatformApi(code)
+      if (!api) {
+        message.error('平台 API 不可用')
+        return
+      }
+      const res = await api.checkLoginStatus()
+      if (res.code === 200 && res.data?.loggedIn) {
+        // 已登录，获取用户信息并更新状态
+        const userInfoRes = await api.getUserInfo()
+        if (userInfoRes.code === 200 && userInfoRes.data) {
+          const userInfo = userInfoRes.data as unknown as PlatformUserInfo
+          setPlatformAccount(code, {
+            id: code,
+            platform_id: code,
+            platform_code: code,
+            platform_name: platforms.find((p) => p.code === code)?.name,
+            user_info_json: JSON.stringify(userInfo),
+            status: 'online' as PlatformAccountStatus,
+            logged_in_at: new Date().toISOString()
+          })
+          message.success(`${platforms.find((p) => p.code === code)?.name} 已登录`)
+        }
+      } else {
+        message.warning(`${platforms.find((p) => p.code === code)?.name} 未登录`)
+      }
+    } catch {
+      message.error('检测登录状态出错')
+    } finally {
+      setOperating((prev) => ({ ...prev, [code]: false }))
+    }
+  }
+
   const getStatusColor = (code: PlatformCode): string => {
     if (isPlatformLoggedIn(code)) return 'green'
     return 'default'
@@ -127,7 +162,7 @@ export function PlatformManagePage(): React.ReactElement {
                   )}
                   <Button
                     icon={<RefreshCw size={14} />}
-                    onClick={() => handleLogin(platform.code)}
+                    onClick={() => handleCheckLogin(platform.code)}
                     loading={operating[platform.code]}
                   />
                 </div>
