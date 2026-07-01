@@ -87,6 +87,14 @@ export abstract class BrowserBase {
       if (userInfo) {
         this.platformUserInfo = userInfo
         logger.info(`[Browser:${this.platformCode}] Login success:`, userInfo.nickname)
+
+        // 如果 HIDE_BROWSER=true，登录成功后隐藏浏览器（关闭后以 headless 模式重新初始化）
+        if (getEnvVar('HIDE_BROWSER', 'false') === 'true') {
+          logger.info(`[Browser:${this.platformCode}] HIDE_BROWSER=true, switching to headless mode`)
+          await this.exit()
+          await this.init(true)
+        }
+
         return { code: 200, data: userInfo }
       }
 
