@@ -252,6 +252,29 @@ export class BrowserXiaohongshu extends BrowserBase {
         await this.page.waitForTimeout(500)
       }
 
+      // Step 9.5 智能标题
+      const recommendTitleBtn = await this.page.$('.recommand-title-btn')
+      if (recommendTitleBtn) {
+        await recommendTitleBtn.click()
+        logger.info('[XHS] Clicked recommend-title-btn element')
+      }
+
+      try {
+        await this.page.waitForSelector('.title-dropdown-container', { timeout: 5000 })
+        const titleDropdownContainer = await this.page.$('.title-dropdown-container')
+        if (titleDropdownContainer) {
+          const items = await titleDropdownContainer.$$('.item')
+          if (items.length > 0) {
+            const randomIndex = Math.floor(Math.random() * items.length)
+            await items[randomIndex].click()
+            logger.info(`[XHS] Selected title ${randomIndex + 1}/${items.length}`)
+          }
+        }
+      } catch {
+        logger.warn('[XHS] title-dropdown-container not found, skip smart title')
+      }
+
+
       // Step 10: Click publish button (在 xhs-publish-btn 的 closed shadow DOM 内)
       logger.info('[XHS] Step 10: Click publish button')
       try {
