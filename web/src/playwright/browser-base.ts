@@ -33,7 +33,7 @@ export abstract class BrowserBase {
     if (this.context) return
 
     // For login, always show browser; for other operations, read from .ENV
-    const showBrowser = headless !== undefined ? !headless : getEnvVar('SHOW_BROWSER', 'false') === 'true'
+    const showBrowser = headless !== undefined ? !headless : getEnvVar('HIDE_BROWSER', 'true') === 'true'
     const isHeadless = !showBrowser
 
     try {

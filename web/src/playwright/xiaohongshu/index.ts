@@ -235,7 +235,10 @@ export class BrowserXiaohongshu extends BrowserBase {
           if (topicContainer) {
             // 等待 .item 元素出现
             await topicContainer.waitForSelector('.item', { timeout: 2000 })
-            await this.page.waitForTimeout(500)
+            // await this.page.waitForTimeout(500)
+            // 会有个加载过程,此时 topicContainer 中会出现 加载中文字,等待加载中文字消失
+            await topicContainer.waitForSelector('.loading-container', { state: 'hidden', timeout: 2000 })
+
             await this.page.keyboard.press('Enter')
             logger.info(`[XHS] No suggestion item, pressed Enter for: #${tag}`)
             
