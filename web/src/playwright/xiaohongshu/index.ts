@@ -215,33 +215,39 @@ export class BrowserXiaohongshu extends BrowserBase {
       for (const tag of hashtags) {
         logger.info(`[XHS] Adding hashtag: #${tag}`)
 
-        // Click on the editor area first
+        // 点击编辑器并将光标移到末尾
         const proseMirror = await this.page.$('.ProseMirror')
         if (proseMirror) {
           await proseMirror.click()
-          await this.page.waitForTimeout(500)
+          await this.page.waitForTimeout(100)
+          // Ctrl+End 将光标移到编辑器末尾
+          await this.page.keyboard.press('Control+End')
+          await this.page.waitForTimeout(100)
         }
 
-        // Type the hashtag
+        // 输入标签（前后加空格分隔）
         await this.page.keyboard.type(` #${tag} `)
-        await this.page.waitForTimeout(1500)
+        await this.page.waitForTimeout(500)
 
-        // Wait for topic suggestion and select it
-        const topicContainer = await this.page.$('#creator-editor-topic-container')
-        if (topicContainer) {
-          const firstItem = await topicContainer.$('.item')
-          if (firstItem) {
-            await firstItem.click()
-            logger.info(`[XHS] Selected topic suggestion for: #${tag}`)
-            await this.page.waitForTimeout(500)
-          } else {
-            // Press Enter if no suggestion
-            await this.page.keyboard.press('Enter')
-            logger.info(`[XHS] No suggestion, pressed Enter for: #${tag}`)
+        // 等待话题建议出现
+        try {
+          await this.page.waitForSelector('#creator-editor-topic-container', { timeout: 2000 })
+          const topicContainer = await this.page.$('#creator-editor-topic-container')
+          if (topicContainer) {
+            const firstItem = await topicContainer.$('.item')
+            if (firstItem) {
+              await firstItem.click()
+              logger.info(`[XHS] Selected topic suggestion for: #${tag}`)
+              await this.page.waitForTimeout(100)
+            } else {
+              await this.page.keyboard.press('Enter')
+              logger.info(`[XHS] No suggestion item, pressed Enter for: #${tag}`)
+            }
           }
-        } else {
+        } catch {
+          // 话题建议未出现，直接按 Enter
           await this.page.keyboard.press('Enter')
-          logger.info(`[XHS] No topic container, pressed Enter for: #${tag}`)
+          logger.info(`[XHS] Topic container not found, pressed Enter for: #${tag}`)
         }
         await this.page.waitForTimeout(500)
       }
