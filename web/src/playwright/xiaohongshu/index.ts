@@ -246,13 +246,57 @@ export class BrowserXiaohongshu extends BrowserBase {
         await this.page.waitForTimeout(500)
       }
 
-      // Step 10: Click publish button (在 xhs-publish-btn 的 shadow DOM 内)
+      // Step 10: Click publish button (在 xhs-publish-btn 的 closed shadow DOM 内)
       logger.info('[XHS] Step 10: Click publish button')
       try {
-        // Playwright 的 locator 可以穿透 closed shadow DOM
-        await this.page.locator('xhs-publish-btn >> .ce-btn.bg-red').click()
-        logger.info('[XHS] Clicked publish button via locator')
-      } catch (error) {
+        // 先点击 xhs-publish-btn 元素，将焦点设在发布按钮区域
+        await this.page.locator('xhs-publish-btn').click()
+        logger.info('[XHS] Clicked xhs-publish-btn element')
+        await this.page.waitForTimeout(300)
+
+        // Tab 切换，从 xhs-publish-btn 开始，按 Tab 找到内部发布按钮
+        let found = false
+        for (let i = 0; i < 10; i++) {
+          await this.page.keyboard.press('Tab')
+          await this.page.waitForTimeout(200)
+
+          const isPublishBtn = await this.page.evaluate(() => {
+            const el = document.activeElement
+            if (!el) return false
+            if (el.classList?.contains('bg-red') && el.tagName === 'BUTTON') return true
+            const root = el.getRootNode()
+            if (root instanceof ShadowRoot) {
+              const btn = root.querySelector('.ce-btn.bg-red')
+              if (btn && document.activeElement === btn) return true
+            }
+            return false
+          })
+
+          if (isPublishBtn) {
+            logger.info(`[XHS] Found publish button after ${i + 1} Tab presses`)
+            await this.page.keyboard.press('Enter')
+            logger.info('[XHS] Pressed Enter to click publish button')
+            found = true
+            break
+          }
+        }
+
+        if (!found) {
+          // 备选方案：直接通过坐标点击（按钮在页面底部居中）
+          logger.info('[XHS] Tab navigation failed, trying coordinate click')
+          const viewport = this.page.viewportSize()
+          if (viewport) {
+            // 按钮在页面底部居中，高度约 90px，按钮约 40px 高
+            const clickY = viewport.height - 45
+            const clickX = viewport.width / 2 + 60 // 偏右，因为有两个按钮
+            await this.page.mouse.click(clickX, clickY)
+            logger.info(`[XHS] Clicked at (${clickX}, ${clickY})`)
+          } else {
+            logger.error('[XHS] Could not determine viewport size')
+            return { success: false, error: '找不到发布按钮' }
+          }
+        }
+      } catch (error: unknown) {
         logger.error('[XHS] Failed to click publish button:', error)
         return { success: false, error: '发布按钮点击失败' }
       }

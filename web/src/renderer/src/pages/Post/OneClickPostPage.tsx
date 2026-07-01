@@ -128,6 +128,7 @@ export function OneClickPostPage(): React.ReactElement {
       const createRes = await postApi.create({
         template_id: template.id,
         status: 'generating',
+        hashtags: template.hashtags,
         image_count: imageCount,
         word_count: wordCount
       })

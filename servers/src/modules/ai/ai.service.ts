@@ -22,11 +22,11 @@ export class AiService {
     if (params.platform) userPrompt += `\n请适配${params.platform}的内容风格`
     
     let wordCount = params.maxTokens || 30
-    if (params.hashtags?.length) {
-      const tags = `\n请包含以下话题标签: ${params.hashtags.map(tag => `#${tag}`).join(', ')}`.trim()
-      wordCount += tags.length
-      userPrompt += tags
-    }
+    // if (params.hashtags?.length) {
+    //   const tags = `\n请包含以下话题标签: ${params.hashtags.map(tag => `#${tag}`).join(', ')}`.trim()
+    //   wordCount += tags.length
+    //   userPrompt += tags
+    // }
 
     userPrompt += `\n\n【重要】请严格控制文案字数在 ${wordCount} 字以内，不要超过 ${wordCount} 个字。`
 
