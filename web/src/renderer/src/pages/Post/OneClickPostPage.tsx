@@ -436,6 +436,13 @@ export function OneClickPostPage(): React.ReactElement {
         onCancel={() => setViewModalOpen(false)}
         footer={<Button onClick={() => setViewModalOpen(false)}>关闭</Button>}
         width={700}
+        centered
+        styles={{
+          container: {
+            maxHeight: "calc(100vh - 100px)",
+            overflowY: "auto",
+          }
+        }}
       >
         {viewPost && (
           <div>
@@ -499,6 +506,13 @@ export function OneClickPostPage(): React.ReactElement {
         confirmLoading={publishing}
         destroyOnHidden
         width={600}
+        centered
+        styles={{
+          container: {
+            maxHeight: "calc(100vh - 100px)",
+            overflowY: "auto",
+          }
+        }}
       >
         {publishPost && (
           <div>
